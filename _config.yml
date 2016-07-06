@@ -7,16 +7,59 @@
 
 # Site settings
 title: YYland
-seo_title: YYland
-keyword: "Jason,"
-email: jasonyong@qq.com
+name: YYland
+en_name: YYland
+keyword: "jason"
+qq: 
+email: jasonyy77@163.com
+location: Beijing, China
 description: > # this means to ignore newlines until "baseurl:"
-  
-  
+
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://yyland.com" # the base hostname & protocol for your site
-twitter_username: jasonyy77
 github_username:  jasonyy77
+twitter_username: jasonyy77
+github_url: https://github.com/jasonyy
+weibo_url: http://weibo.com/jasonyy77
+#linkedin_url: https://cn.linkedin.com/in/imrui
 
-# Build settings
-markdown: kramdown
+# Disque
+disque: yyland.disqus.com
+
+gems:
+  - jekyll-paginate
+  - jekyll-geo-pattern
+  - jekyll-github-metadata
+
+# Pagination
+paginate: 10
+paginate_path: 'page:num'
+
+# Navigation
+navs:
+  -
+    href: /
+    label: 首页
+
+  -
+    href: /blog
+    label: 博文
+
+  -
+    href: /bookmark
+    label: 书签
+
+  -
+    href: /about
+    label: 关于
+
+# Google Analytics
+google_tracking_id: 'UA-80358538-1'
+
+# Sidebar to show popular repo
+side_bar_repo_limit: 5 # Number of repos to show
+
+# For about.html. Fell free to create your own!
+skill_software_keywords: [Java, Python, Golang, C, lua, MySQL, Android, Linux, Nginx]
+skill_j2ee_keywords: [Spring, SpringMVC, MyBatis, Struct, Play Framework, JSP, Velocity]
+skill_web_keywords: [Tornado, Flask, Django, AngularJS, Boostrap, HTML, CSS, JS, JQuery, Ajax]

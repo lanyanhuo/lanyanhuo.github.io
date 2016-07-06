@@ -3,18 +3,28 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>{% if page.title %}{{ page.title | escape }} - {{ site.seo_title | escape }}{% else %}{{ site.seo_title | escape }}{% endif %}</title>
+  <title>{% if page.title %}{{ page.title | escape }} - {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
   <meta name="keywords"  content="{{ site.keyword }}">
 
-  <link rel="stylesheet" href="{{ "/assets/css/main.css" | prepend: site.baseurl }}">
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
 
   <link rel="stylesheet" href="/components/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/components/font-awesome/4.6.3/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/components/ionicons/2.0.1/css/ionicons.min.css">
-
+  <link rel="stylesheet" href="/components/octicons/3.5.0/octicons/octicons.css">
+  <link rel="stylesheet" href="/components/hover/2.0.2/css/hover-min.css">
+  <link rel="stylesheet" href="/components/primer-markdown/2.5.1/user-content.min.css">
+  <link rel="stylesheet" href="/assets/css/common.css">
+  <link rel="stylesheet" href="/assets/css/syntax.css">
+  <!-- CSS set in page -->
+  {% for css in page.css %}
+  <link rel="stylesheet" href="/assets/css/{{css}}">
+  {% endfor %}
+  <!-- CSS set in layout -->
+  {% for css in layout.css %}
+  <link rel="stylesheet" href="/assets/css/{{css}}">
+  {% endfor %}
   <script type="text/javascript" src="/components/jquery/2.1.4/jquery.min.js"></script>
   <script type="text/javascript" src="/components/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
