@@ -1,0 +1,65 @@
+<div class="about row">
+
+    <div class="col-md-8">
+
+        <h2>个人概况</h2>
+
+        <p>{{ site.description }}</p>
+
+        <h2>联系方式</h2>
+
+        <ul>
+            <li>QQ：<a href="{{ site.qq }}" target="_blank">{{ site.qq }}</a></li>
+            <li>Email：<a href="mailto:{{ site.email }}" target="_top">{{ site.email }}</a></li>
+            <li>GitHub：<a href="{{ site.github_url }}" target="_blank">{{ site.github_url }}</a></li>
+            <li>微博：<a href="{{ site.weibo_url }}" target="_blank">{{ site.weibo_url }}</a></li>
+        </ul>
+
+        <h2>技能 Keywords</h2>
+
+        {% if site.skill_software_keywords %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Software Engineer Keywords</h3>
+            </div>
+            <div class="panel-body">
+                {% for keyword in site.skill_software_keywords %}
+                <button class="btn btn-default" type="button">{{ keyword }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if site.skill_j2ee_keywords %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">J2EE Developer Keywords</h3>
+            </div>
+            <div class="panel-body">
+                {% for keyword in site.skill_j2ee_keywords %}
+                <button class="btn btn-default" type="button">{{ keyword }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if site.skill_web_keywords %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Web Developer Keywords</h3>
+            </div>
+            <div class="panel-body">
+                {% for keyword in site.skill_web_keywords %}
+                <button class="btn btn-default" type="button">{{ keyword }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="col-md-4">
+        {% include sidebar-popular-repo.html %}
+    </div>
+
+</div>
