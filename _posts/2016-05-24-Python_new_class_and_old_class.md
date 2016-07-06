@@ -1,3 +1,10 @@
+---
+layout: post
+title: Python New Class and Old Class
+category: Python
+tags: [Python]
+---
+
 经典类:
 
 ``` shell
