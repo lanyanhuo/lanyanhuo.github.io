@@ -60,6 +60,6 @@ google_tracking_id: 'UA-80358538-1'
 side_bar_repo_limit: 5 # Number of repos to show
 
 # For about.html. Fell free to create your own!
-skill_op_keywords: [Linux, MySQL, WebServer, KVM, Docker, Network]
 skill_software_keywords: [Java, Python, PHP, Perl, C, lua, Android, Shell]
+skill_op_keywords: [Linux, MySQL, WebServer, KVM, Docker, Network, NoSQL, Log]
 skill_web_keywords: [Tornado, Flask, Django, AngularJS, Boostrap, HTML, CSS, JS, JQuery, Ajax]
