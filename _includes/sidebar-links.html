@@ -1,0 +1,14 @@
+{% if site.links %}
+<div class="blog-menu-group">
+    <h3 class="sidebar-title">{{ site.links_name }}</h3>
+    <ul class="list-group">
+        {% for link in site.links %}
+        <li class="list-group-item">
+            <a href="{{ link.href }}" target="_blank" title="{{ link.label }}">
+                <span class="glyphicon glyphicon-link pull-left"></span>{{ link.label }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

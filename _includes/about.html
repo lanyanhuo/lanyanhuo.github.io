@@ -1,22 +1,31 @@
 <div class="about row">
 
     <div class="col-md-8">
-
         <h2>个人概况</h2>
-
         <p>{{ site.description }}</p>
 
         <h2>联系方式</h2>
-
-        <ul>
-            <li>QQ：<a href="{{ site.qq }}" target="_blank">{{ site.qq }}</a></li>
-            <li>Email：<a href="mailto:{{ site.email }}" target="_top">{{ site.email }}</a></li>
-            <li>GitHub：<a href="{{ site.github_url }}" target="_blank">{{ site.github_url }}</a></li>
-            <li>微博：<a href="{{ site.weibo_url }}" target="_blank">{{ site.weibo_url }}</a></li>
-        </ul>
+        <div class="about-contact-list">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <i class="fa fa-qq fa-2x"></i>{{ site.qq }}
+                </li>
+                <li class="list-group-item">
+                    <i class="mega-octicon octicon-mail pull-left"></i><a href="mailto:{{ site.email }}" target="_top">&nbsp;{{ site.email }}</a>
+                </li>
+                <li class="list-group-item">
+                    <i class="fa fa-github fa-2x pull-left"></i><a href="{{ site.github_url }}" target="_blank">{{ site.github_url }}</a>
+                </li>
+                <!--li class="list-group-item">
+                    <i class="fa fa-linkedin fa-2x pull-left"></i><a href="{{ site.linkedin_url }}" target="_blank">{{ site.linkedin_url }}</a>
+                </li-->
+                <li class="list-group-item">
+                    <i class="fa fa-weibo fa-2x pull-left"></i><a href="{{ site.weibo_url }}" target="_blank">{{ site.weibo_url }}</a>
+                </li>
+            </ul>
+        </div>
 
         <h2>技能 Keywords</h2>
-
         {% if site.skill_software_keywords %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -33,7 +42,7 @@
         {% if site.skill_op_keywords %}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">OP Keywords</h3>
+                <h3 class="panel-title">OP Developer Keywords</h3>
             </div>
             <div class="panel-body">
                 {% for keyword in site.skill_op_keywords %}
@@ -60,6 +69,7 @@
 
     <div class="col-md-4">
         {% include sidebar-popular-repo.html %}
+        {% include sidebar-contact.html %}
     </div>
 
 </div>

@@ -103,7 +103,7 @@
 /** Footer **/
 .site-footer{
     position:relative;
-    margin-top:40px;
+    margin-top:20px;
     padding:40px 0;
     font-size:12px;
     line-height:1.5;
@@ -157,4 +157,45 @@
 
 .sidebar-title {
     text-align: center;
+}
+
+.post-cat-hide {
+    display: none;
+}
+
+.post-cat-show {
+    display: block;
+}
+
+.blog-menu-group a {
+    font-weight: bold;
+    display: block;
+    text-decoration: none;
+    padding: 10px 15px;
+}
+
+.blog-menu-group li {
+    padding: 0 0;
+    -webkit-transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in;
+    -o-transition: all 0.3s ease-in;
+}
+
+.blog-menu-group li:hover {
+    background: #333;
+}
+
+.blog-menu-group li:hover a {
+    font-weight: bold;
+    color: #fff;
+}
+
+.user-icon-link ul li {
+    float: left;
+}
+
+.about-contact-list a {
+    font-weight: bold;
+    display: block;
+    padding: 5px 0;
 }
