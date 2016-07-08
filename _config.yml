@@ -48,10 +48,10 @@ navs:
     href: /blog
     label: 时光机
 
-  -
-    href: /bookmark
-    label: 书签
-
+#  -
+#    href: /bookmark
+#    label: 书签
+#
   -
     href: /about
     label: 关于
