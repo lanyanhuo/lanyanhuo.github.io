@@ -1,4 +1,4 @@
-# Jason's 博客 [http://blog.yyland.com](http://blog.yyland.com)
+# Ren's 博客 [http://ren.yyland.com](http://ren.yyland.com)
 
 基于Jekyll制作的个人博客网站，支持RSS订阅。
 
@@ -6,5 +6,4 @@
 
 * 首页
 * 博文
-* 书签
 * 关于

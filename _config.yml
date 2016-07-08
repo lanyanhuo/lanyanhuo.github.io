@@ -6,28 +6,28 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: YYland
-name: YYland
-home_title: 歪歪大陆
+title: 小河先生
+name: 小河先生
+home_title: 小河先生
 home_sub_title: 我随便写写,你随便看看.
-keyword: "jason, yong, linux, op, sa, 运维"
+keyword: "ren, android, 数据结构, 算法, rlq, Linux"
 qq: 
-email: jasonyy77@163.com
+email: rlqjue@gmail.com
 location: Beijing, China
 description: > # this means to ignore newlines until "baseurl:"
   我随便写写,你随便看看.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://blog.yyland.com" # the base hostname & protocol for your site
-github_username:  jasonyy77
-github_url: https://github.com/jasonyy77
-facebook_url: https://www.facebook.com/jasonyy77
-twitter_url: https://twitter.com/jasonyy77
-weibo_url: http://weibo.com/jasonyy77
-linkedin_url: 
-google_plus_url: https://plus.google.com/u/0/112362051377731857526/posts
+url: "http://ren.yyland.com" # the base hostname & protocol for your site
+github_username:  lanyanhuo
+github_url: https://github.com/lanyanhuo
+facebook_url: 
+twitter_url: 
+weibo_url: 
+linkedin_url: https://www.linkedin.com/in/%E5%88%A9%E7%90%B4-%E4%BB%BB-36b5a4120?trk=hp-identity-name
+google_plus_url: 
 
 # Disque
-disque: yyland.disqus.com
+disque: rlq.disqus.com
 
 gems:
   - jekyll-paginate
@@ -65,16 +65,9 @@ links:
     href: http://coolshell.cn/
     label: 酷壳
 
-  -
-    href: http://tool.oschina.net/
-    label: 在线工具
-
-  -
-    href: http://chenlinux.com/
-    label: 三斗室
 
 # Google Analytics
-google_tracking_id: 'UA-80358538-1'
+google_tracking_id: 'UA-80478180-1'
 
 # Sidebar to show popular repo
 side_bar_repo_limit: 5 # Number of repos to show
