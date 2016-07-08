@@ -16,7 +16,7 @@ location: Beijing, China
 description: > # this means to ignore newlines until "baseurl:"
 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yyland.com" # the base hostname & protocol for your site
+url: "http://blog.yyland.com" # the base hostname & protocol for your site
 github_username:  jasonyy77
 twitter_username: jasonyy77
 github_url: https://github.com/jasonyy77
