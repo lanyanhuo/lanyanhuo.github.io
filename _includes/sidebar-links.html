@@ -5,7 +5,8 @@
         {% for link in site.links %}
         <li class="list-group-item">
             <a href="{{ link.href }}" target="_blank" title="{{ link.label }}">
-                <span class="glyphicon glyphicon-link pull-left"></span>{{ link.label }}
+                <i class="glyphicon glyphicon-link pull-left"></i>&nbsp;
+                <span>{{ link.label }}</span>
             </a>
         </li>
         {% endfor %}
