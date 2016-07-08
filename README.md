@@ -1,4 +1,4 @@
-# 董瑞博客 [http://imrui.net](http://imrui.net)
+# Jason's 博客 [http://blog.yyland.com](http://blog.yyland.com)
 
 基于Jekyll制作的个人博客网站，支持RSS订阅。
 
