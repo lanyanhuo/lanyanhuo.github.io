@@ -18,8 +18,8 @@ description: > # this means to ignore newlines until "baseurl:"
   我随便写写,你随便看看.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ren.yyland.com" # the base hostname & protocol for your site
-github_username:  lanyanhuo
-github_url: https://github.com/lanyanhuo
+github_username:   rlq
+github_url: https://github.com/rlq
 facebook_url: 
 twitter_url: 
 weibo_url: 
