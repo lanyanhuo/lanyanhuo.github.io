@@ -67,6 +67,10 @@ links:
     href: http://coolshell.cn/
     label: 酷壳
 
+# 多说评论
+duoshuo:
+  enable: true
+  short_name: rlqyyland
 
 # Google Analytics
 google_tracking_id: 'UA-80478180-1'
