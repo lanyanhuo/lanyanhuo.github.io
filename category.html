@@ -1,3 +1,10 @@
+---
+layout: page
+title: 博文分类
+subtitle: <span class="mega-octicon octicon-clippy"></span>&nbsp;&nbsp; Take notes about everything new
+menu: 博文分类
+---
+
 <section class="content container">
     <div class="row">
         <div class="col-md-4">
@@ -11,9 +18,9 @@
                 <li class="post-list-item {% if post.category == 'site.categories[0][0]' %}post-cat-show{% else %}post-cat-hide{% endif %}  {{ post.category }}">
                     <h2 class="post-list-title">
                         <a class="hvr-underline-from-center" href="{{ post.url }}">{{ post.title }}</a>
-                        <p class="post-list-meta pull-right">
-                            <span class="octicon octicon-calendar"></span>{{ post.date | date: "%Y/%m/%d" }}
-                        </p>
+                        <span class="post-list-meta pull-right">
+                            <i class="octicon octicon-calendar"></i>{{ post.date | date: "%Y/%m/%d" }}
+                        </span>
                     </h2>
                     <p class="post-list-description">
                         {{ post.excerpt | strip_html | strip }}
@@ -22,19 +29,19 @@
                 {% endfor %}
             </ol>
             <!-- Comments -->
-            {% include disqus-comments.html %}
+            {% include comments.html %}
         </div>
     </div>
 </section>
 <script>
+    function categoryClick(category) {
+        $("." + category).removeClass("post-cat-hide").addClass("post-cat-show");
+    }
     $(document).ready(function(){
-        function categoryClick(category) {
-            $("." + category).removeClass("post-cat-hide").addClass("post-cat-show");
-        }
         var hash = window.location.hash;
         var cat;
         if(hash) {
-            cat = hash.substring(1);
+            cat = decodeURIComponent(hash.substring(1));
         } else {
             cat = $(".list-group-item:first").find("a").attr("title");
         }

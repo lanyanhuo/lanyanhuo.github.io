@@ -1,3 +1,7 @@
-<div class="form-group">
-    <input type="text" class="form-control" placeholder="Search">
-</div>
+{% if site.google_cse.enable %}
+<form class="search" action="/search" method="get" accept-charset="utf-8">
+    <div class="form-group">
+        <input type="search" class="form-control" id="search" name="q" maxlength="20" placeholder="Search">
+    </div>
+</form>
+{% endif %}
