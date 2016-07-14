@@ -34,7 +34,14 @@ gems:
   - jekyll-geo-pattern
   - jekyll-github-metadata
   - kramdown
-  - rouge
+
+markdown: kramdown
+kramdown:
+  input:  GFM
+
+highlighter:
+  disable: true
+
 
 # Pagination
 paginate: 10

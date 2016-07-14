@@ -13,6 +13,7 @@
     </div>
     <script type="text/javascript" src="/components/geopattern/1.2.3/js/geopattern.min.js"></script>
     <script type="text/javascript" src="/components/underscore/1.8.3/underscore-min.js"></script>
+    <script type="text/javascript" src="/components/highlight/9.5.0/highlight.pack.js"></script>
     <script type="text/javascript" src="/assets/js/common.js"></script>
     {% for javascript in page.javascript %}
     <script src="/assets/js/{{javascript}}"></script>
@@ -30,5 +31,6 @@
       </script>
     </div>
     {% endif %}
+    <script>hljs.initHighlightingOnLoad();</script>
   </div>
 </footer>
