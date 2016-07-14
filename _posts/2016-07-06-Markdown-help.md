@@ -13,7 +13,12 @@ tags: [Other, Markdown, github]
 ```
 Code:
 # 这是 H1
+```
+
 OR
+
+```
+Code:
 # 这是 H1 #
 ```
 
