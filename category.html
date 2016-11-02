@@ -15,7 +15,7 @@ menu: 博文分类
         <div class="col-md-8">
             <ol class="post-list">
                 {% for post in site.posts %}
-                <li class="post-list-item {% if post.category == 'site.categories[0][0]' %}post-cat-show{% else %}post-cat-hide{% endif %}  {{ post.category }}">
+                <li class="post-list-item {% if post.categories.include?('site.categories[0][0]') %}post-cat-show{% else %}post-cat-hide{% endif %}  {{ post.categories |join:' ' }}">
                     <h2 class="post-list-title">
                         <a class="hvr-underline-from-center" href="{{ post.url }}">{{ post.title }}</a>
                         <span class="post-list-meta pull-right">
