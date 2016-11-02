@@ -1,14 +1,11 @@
 ---
 layout: post
 title: DispatchTouchEvent 
-category: Git
-tags: [工作记录]
-
+category: Android
+tags: [Android]
 ---
 
-# 10.31
-
-##一  DispatchTouchEvent
+## 一  DispatchTouchEvent
 
 我们常常会遇到这样的需求：在Android的某个UI中，向上滑动打开A View， 向下滑动会打开B View，而左右滑动会使ViewPager滑动。这个应该是比较简单的需求。
 还有就是在RecycleView中有ItemView需要左右滑动，能够删除该ItemView。
@@ -22,7 +19,7 @@ tags: [工作记录]
 3. 而当前是Activity，由各种View组成，只是Viewpager可见，并可以左右滑动。
 4. 当然每个View都有自己对应的一些点击事件。
 
-####所有View的状态
+#### 所有View的状态
 
 ```
 public enum DispatchStatus {
@@ -32,7 +29,7 @@ public enum DispatchStatus {
     Close,
 }
 ```
-####ActionView
+#### ActionView
 设置 ` void setDispatchListener(DispatchStatus status, boolean isShow); ` 会判断当前触发响应的是哪个从而作出显示。
 
 ```
@@ -98,7 +95,7 @@ public enum DispatchStatus {
     }
 ```
 
-####UpView or DownView
+#### UpView or DownView
 让ActionView一起处理TouchEvent，只需
 
 ```
@@ -108,7 +105,7 @@ public enum DispatchStatus {
     }
 ```
 
-####Activity
+#### Activity
 `setContentView(new ActionView(this)); `
 
 将ViewPager的onTouchEvent去做判断，需要滚动时就去响应
@@ -163,7 +160,7 @@ public enum DispatchStatus {
 
 #### 源码[here](http://blog.csdn.net/skyflying2012/article/details/23742683).
 
-##二
+## 二
 
 从简单一定的理论入手
 Android的touch事件主要包括点击onClick，长按onLongClick，拖拽onDrag，滑动onScroll等
