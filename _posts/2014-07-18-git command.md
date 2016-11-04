@@ -179,3 +179,31 @@ git config --global merge.tool diffmerge
 git config --global mergetool.diffmerge.cmd 'diffmerge --merge --result="$MERGED" "$LOCAL" "$(if test -f "$BASE"; then echo "$BASE"; else echo "$LOCAL"; fi)" "$REMOTE"'
 git config --global mergetool.diffmerge.trustExitCode true
 ```
+
+### 7 .gitignore
+
+1. /开头表示目录
+2. * 通配多个字符
+3. ？通配单个子符
+4. [] 包含单个字符的匹配列表
+5. ！ 不忽略匹配到的文件和目录
+6. gitignore从上到下进行规制匹配，如果前面的规则匹配范围更大，后面的规则将不会生效
+
+[例子](http://blog.csdn.net/benkaoya/article/details/7932370#comments)(借用别人)
+
+```
+# 忽略*.o和*.a文件
+ *.[oa]
+# 忽略*.b和*.B文件，my.b除外
+*.[bB]
+!my.b
+# 忽略dbg文件和dbg目录
+dbg
+# 只忽略dbg目录，不忽略dbg文件
+dbg/
+# 只忽略dbg文件，不忽略dbg目录
+dbg
+!dbg/
+# 只忽略当前目录下的dbg文件和目录，子目录的dbg不在忽略范围内
+/dbg
+```
