@@ -5,9 +5,12 @@ category: Git
 tags: [git]
 ---
 
-## 文档
+## 参考文档
 [http://www.imooc.com/article/1111](http://www.imooc.com/article/1111)
+
 [https://git-scm.com/book/zh/v2](https://git-scm.com/book/zh/v2)
+
+[http://blog.csdn.net/sunboy_2050/article/details/7529022](http://blog.csdn.net/sunboy_2050/article/details/7529022)
 
 
 
@@ -80,7 +83,6 @@ tags: [git]
 * git revert
 * git stash			--保存和恢复进度
 * git stash pop	
-* git tag
 
 
 ### 3 查看 examine the history and state
@@ -147,7 +149,50 @@ tags: [git]
 	* 
 
 	
-7. git tag  给当前版本打标签
+7. tag  给当前版本打标签
+	* git tag  --查看版本
+	* git tag [name] --创建版本
+	* git tag -d [name]  --删除版本
+	* git tag -r  --查看远程版本
+	* git push origin [name] --创建远程版本
+	* git push origin :refs/tafs/[name]  --删除远程版本
+	* git pull origin --tags  --合并远程tag到本地
+	* git push origin --tags  --上传本地tag到远程
+	* git tag -a [name] -m "your Message"  -- 创建带注释的tag
+
+```
+usage: git tag [-a | -s | -u <key-id>] [-f] [-m <msg> | -F <file>] <tagname> [<head>]
+   or: git tag -d <tagname>...
+   or: git tag -l [-n[<num>]] [--contains <commit>] [--points-at <object>]
+		[--format=<format>] [--[no-]merged [<commit>]] [<pattern>...]
+   or: git tag -v <tagname>...
+
+    -l, --list            list tag names
+    -n[<n>]               print <n> lines of each tag message
+    -d, --delete          delete tags
+    -v, --verify          verify tags
+
+Tag creation options
+    -a, --annotate        annotated tag, needs a message
+    -m, --message <message>
+                          tag message
+    -F, --file <file>     read message from file
+    -s, --sign            annotated and GPG-signed tag
+    --cleanup <mode>      how to strip spaces and #comments from message
+    -u, --local-user <key-id>
+                          use another key to sign the tag
+    -f, --force           replace the tag if exists
+    --create-reflog       create a reflog
+
+Tag listing options
+    --column[=<style>]    show tag list in columns
+    --contains <commit>   print only tags that contain the commit
+    --merged <commit>     print only tags that are merged
+    --no-merged <commit>  print only tags that are not merged
+    --sort <key>          field name to sort on
+    --points-at <object>  print only tags of the object
+    --format <format>     format to use for the output
+```
 
 ### 5 协作 collaborate
 1. fetch
@@ -179,6 +224,12 @@ git config --global merge.tool diffmerge
 git config --global mergetool.diffmerge.cmd 'diffmerge --merge --result="$MERGED" "$LOCAL" "$(if test -f "$BASE"; then echo "$BASE"; else echo "$LOCAL"; fi)" "$REMOTE"'
 git config --global mergetool.diffmerge.trustExitCode true
 ```
+2. 配置用户信息
+
+```
+git config --global user.name "yourName"
+git config --global user.email "yourEmail@xx.com"
+```
 
 ### 7 .gitignore
 
@@ -207,3 +258,17 @@ dbg
 # 只忽略当前目录下的dbg文件和目录，子目录的dbg不在忽略范围内
 /dbg
 ```
+
+### 8 remote
+1. git clone git://github.com/xxx/project.git  --检出仓库
+2. git remote -v  --查看远程仓库
+3. git remote add [name] [url]  --添加远程仓库
+4. git remote rm [name]  --删除远程仓库
+5. git remote set-url --push [name] [newUrl]  --修改远程仓库
+6. git pull [remoteName] [localBranchName]  --拉取远程仓库
+7. git push [remoteName] [localBranchName]  --推送到远程仓库
+8. git push origin test:master  --提交本地test分作为远程master的分支
+9. git push origin test:test --提交本地test分支作为远程test分支
+
+
+
