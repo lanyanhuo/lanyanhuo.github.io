@@ -146,3 +146,41 @@ nothing to commit, working directory clean
 On branch master
 Your branch is up-to-date with 'origin/master'.
 ```
+
+#### 合并A分支的一部分到B分支 
+1. commits，[摘自](http://blog.csdn.net/ybdesire/article/details/42145597)
+
+	```
+	git checkout B_branch
+	git cherry-pick 9877111 //这个commit就被合并到B分支
+	
+	一系列commit,使用rebase，如果合并的commit是 977633-9877111到B分支，需要基于A分支创建一个新的分支A1_branch，并指明A1_branch的最后一个commit：
+	git checkout -b A1_branch 9877111
+	git rebase --onto B_branch 977633^ (977633^指明commit的开始)
+```
+
+2. file  
+
+	```
+	git checkout B_branch
+	git checkout --patch B_branch a.txt//合并A分支的文件到B分支
+	或者git checkout A_branch a.txt //将A分支的文件copy到B分支
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
