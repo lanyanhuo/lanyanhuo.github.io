@@ -17,6 +17,12 @@ tags: [gerrit]
 ```
 这是最笨的办法也最实用 git reset 最开始的commitId, 然后再去commit，push 或者 `git cherry-pick commitId` 将之前的提交记录同步 
 
+```
+ ! [remote rejected] HEAD -> refs/for/feature_fit_v2 (change http://gerrit/19291 closed)
+error: failed to push some refs to 'ssh://hehehe@gerrit:29418/project/demo'
+```
+因为19291这条change已经merge，到remote延迟导致reset feature_fit_v2,然后我git fetch，push后报错，有时是因为没有git fetch。
+
 #### 2. git status
 
 ```
