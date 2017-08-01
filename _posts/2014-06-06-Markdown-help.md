@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Markdown简明手册
+title: MD manual
 category: Other
 tags: [Other, Markdown, github]
 ---

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 架构 
+title: [译] 架构 
 category: Android
 tags: [Architeture]
 ---
@@ -65,6 +65,8 @@ Android app普通的结构是这样的：
 
 * UI --你放所有Activity， Fragment， Adapter和其他与用户相关的Android代码的地方。
 * Storage --数据库指定的代码
+
+	```
 Storage — Database specific code that implements the interface our Interactors use for accessing data and storing data. This includes, for example, ContentProviders or ORM-s such as DBFlow.
 Network — Things like Retrofit go here.
 Middle layer
@@ -77,6 +79,7 @@ Interactors — These are the classes which actually contain your business l
 Models — These are your business models that you manipulate in your business logic.
 Repositories — This package only contains interfaces that the database or some other outer layer implements. These interfaces are used by Interactors to access and store data. This is also called a repository pattern.
 Executor — This package contains code for making Interactors run in the background by using a worker thread executor. This package is generally not something you need to change.
+	```
 
 ### 一个简单的例子
 在这个例子中，我们的用例将会：**“当app启动时迎接用户是一个存储在数据库中的信息。”**这个例子将展示怎样编写以下三个所需要的包才能是测试用例工作：

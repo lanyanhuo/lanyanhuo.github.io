@@ -49,8 +49,7 @@ tags: [apktool]
 	sudo: apktool: command not found 
 	```
 官方有提示：`Note - Wrapper scripts are not needed, but helpful so you don’t have to type java -jar apktool.jar over and over.`
-
-此时我使用了**`./apktool d test.apk`**
+**`./apktool d test.apk`**
 
 2. d2j-dex2jar.sh: line 36: ./d2j_invoke.sh: Permission denied
 
@@ -61,30 +60,6 @@ tags: [apktool]
 需要增加权限 `sudo chmod +x d2j_invoke.sh`
 
 #### apktool命令
-1. 反编译APK命令
-
-decode:该命令用于进行反编译apk文件，一般用法为 :
-
-apktool d <file.apk> <dir>
-
-<file.apk>代表了要反编译的apk文件的路径，最好写绝对路径，比如C:\MusicPlayer.apk
-
-<dir>代表了反编译后的文件的存储位置，比如C:\MusicPlayer
-
-如果你给定的<dir>已经存在，那么输入完该命令后会提示你，并且无法执行，需要你重新修改命令加入-f指令
-
-apktool d –f <file.apk> <dir>
-
-这样就会强行覆盖已经存在的文件
-
-2. 编译修改好的文件
-
-build:该命令用于编译修改好的文件，一般用法为:
-
-apktool b <dir>
-
-这里的<dir>就是刚才你反编译时输入的<dir>（如C:\MusicPlayer）,输入这行命令后，如果一切正常，你会发现C:\MusicPlayer内多了2个文件夹build和dist，其中分别存储着编译过程中逐个编译的文件以及最终打包的apk文件。
-
-3. install-framework
-
-该命令用于为APKTool安装特定的framework-res.apk文件，以方便进行反编译一些与ROM相互依赖的APK文件。具体情况请看常见问题
+1. 反编译APK命令`apktool d [-f] <file.apk> <dir>`
+2. 编译修改好的文件 `apktool b <dir>`
+3. install -framework

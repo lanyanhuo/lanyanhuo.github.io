@@ -107,7 +107,15 @@ fatal: Could not read from remote repository.
 Please make sure you have the correct access rights
 and the repository exists.
 ```
-以上错误是因为没有个远程分支绑定，可直接修改vi .git/config 把 dev分支对应的远程改为 gerrit/dev
+以上错误是因为没有个远程分支绑定，可直接修改vi .git/config 把 dev分支应的远程改为 gerrit/dev
+
+#### 7 No user exists for uid 501， fatal: Could not read from remote repository.  Please make sure you have the correct access rights and the repository exists.
+
+```
+ssh ip
+id
+```
+重启终端就好了，终端导致的ssh重启。
 
 
 ####  一系列解决问题的网址
