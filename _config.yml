@@ -6,9 +6,9 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: 清河诀恋
-name: 清河诀恋
-home_title: 清河诀恋
+title: LqRen
+name: LqRen
+home_title: LqRen
 home_sub_title: 你当自助！
 keyword: "ren, android, 数据结构, 算法, rlq, Linux"
 qq:
@@ -70,11 +70,11 @@ links_name: 友情链接
 links:
   -
     href: http://blog.yyland.com
-    label: YYland
+    label: YangYong
 
   -
     href: http://imrui.com
-    label: 董瑞
+    label: DongRui
 
 # 多说评论
 duoshuo:
