@@ -5,8 +5,8 @@ category: Training
 tags: [Getting Started]
 ---
 
-Develop/Training/Getting Started
-## 1	Building Your First App### 1.1 Create an Android project### 1.2 Run Your App### 1.3 Build a simple User Interface[https://developer.android.com/training/basics/firstapp/building-ui.html](https://developer.android.com/training/basics/firstapp/building-ui.html)
+[Develop/Training/Getting Started](https://developer.android.com/training/index.html)
+## 1	Building Your First App### 1.1 Create an Android project### 1.2 Run Your App### 1.3 Build a simple User Interface[https://developer.android.com/training/basics/firstapp/building-ui.html](https://developer.android.com/training/basics/firstapp/building-ui.html)
 
 ### 1.4 Start Another Activity## 2	Building Your First App### 2.1 Different Languages and Cultures1.	culture-specific strings —— the languages of current locale2.	top level `res/value/string.xml`
 #### 2.1.1	Create Locale Directories and Resources files 1.	values-b+es/string.xml, mipmap-b+es+ES/2.	android loads res according the locale Settings
