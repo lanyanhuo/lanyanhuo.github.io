@@ -140,6 +140,43 @@ tags: [UI——Material Design]
 
 ## 6 Defining Custom Animations
 1. transitions with shared elements
+2. Touch feedback, Circular reveal, activity transitions, curved motion, view state changes 
+
+### 6.1 Customize Touch Feedback
+1. [RippleDrawable](https://developer.android.com/reference/android/graphics/drawable/RippleDrawable.html)
+2. `?android:attr/selectableItemBackground`指定有界的波纹
+3. `?android:attr/selectableItemBackgroundBorderless`指定越过视图边界的波纹。 它将由一个非空背景的视图的最近父项所绘制和设定边界
+4. `android:colorControlHighlight`指定一种颜色
+
+
+### 6.2 Use the Reveal Effect
+1. `ViewAnimationUtil.createCircularReveal()` show or hide a group of UI elements
+
+```
+// previously invisible view
+View myView = findViewById(R.id.my_view);
+
+// get the center for the clipping circle
+int cx = myView.getWidth() / 2;
+int cy = myView.getHeight() / 2;
+
+// get the final radius for the clipping circle
+float finalRadius = (float) Math.hypot(cx, cy);
+float initialRadius = finalRadius;
+
+// create the animator for this view (the start radius is zero)
+Animator anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+
+anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
+
+// make the view visible and start the animation
+myView.setVisibility(View.VISIBLE);
+anim.start();
+```
+
+
+
+
 
 ## 7 Maintaining Compatibility
 
