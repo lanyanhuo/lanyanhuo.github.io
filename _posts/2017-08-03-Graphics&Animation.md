@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Multimedia
+title: Graphics&Animation
 category: Training
-tags: [Multimedia]
+tags: [Graphics&Animation]
 ---
 
 [Building Apps with Graphics & Animation](https://developer.android.com/training/building-graphics.html)
