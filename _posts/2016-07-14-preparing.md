@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 第一天
+title: Preparing
 category: 工作记录
 tags: [工作记录]
 ---
