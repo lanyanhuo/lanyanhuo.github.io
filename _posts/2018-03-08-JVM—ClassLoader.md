@@ -81,7 +81,7 @@ private static File[] getExtDirs() {
 
 ### 4 CustomClassLoader
 1. 父类加载器为AppClassLoader。
-
+![delegate](https://raw.githubusercontent.com/rlq/image/master/jvm/ParentsDelegate.png)
 
 ### 5 ClassLoader的重要方法
 1. public ClassL<?> loadClass(String name) throws ClassNotFoundException
@@ -89,11 +89,16 @@ private static File[] getExtDirs() {
 3. protected final Class<?> findClass(String name) throws ClassNotFoundException
 4. protected final Class<?> findLoadedClass(String name)查找已经加载的类。
 
+![method](https://raw.githubusercontent.com/rlq/image/master/jvm/classLoader_%20process.png)
+
 ## 三 双亲委派模型
 ### 1 工作原理
 1. 一个类加载器收到类加载请求，先把这个请求委托给父类的加载器去执行。
 2. 父类还存在父类加载器就向上委托，依次递归，最终到达顶层的启动类加载器。
 3. 父类完成类加载任务后，就成功返回，如父类无法按成加载任务，子类加载器才会自己去加载。
+
+![classLoader](https://raw.githubusercontent.com/rlq/image/master/jvm/ClassLoader.jpeg)
+
 
 ### 2 优势
 1. java类因类加载器的层级关系，从而避免了重复加载。
