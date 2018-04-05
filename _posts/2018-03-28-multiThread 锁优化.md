@@ -202,5 +202,4 @@ public class GameServer {
 ```
 
 转自
-
-![Java 多线程编程—锁优化](http://www.importnew.com/27935.html)
+[Java 多线程编程—锁优化](http://www.importnew.com/27935.html)
