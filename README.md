@@ -1,6 +1,6 @@
 # [Ren的博客](http://ren.yyland.com)
 
-基于Jekyll制作的个人博客网站，支持RSS订阅。
+关于技术总结的一些个人见解.
 
 ## 导航菜单
 
