@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [转]MultiThread 锁优化
+title: MultiThread 锁优化[转]
 category: Java
 tags: [Java]
 ---
@@ -201,5 +201,6 @@ public class GameServer {
 }
 ```
 
-> 转自
+转自
+
 ![Java 多线程编程—锁优化](http://www.importnew.com/27935.html)
