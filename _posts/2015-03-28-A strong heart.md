@@ -1,7 +1,7 @@
 ---
 layout: post
 title: A strong heart
-category: 情比纱长
+category: Record
 tags: [A strong heart]
 ---
 
