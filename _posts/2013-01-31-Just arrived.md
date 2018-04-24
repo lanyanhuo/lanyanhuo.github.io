@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 第一章 初来乍到 
-category: 情比纱长
-tags: [情比纱长]
+title: Just arrived
+category: Record
+tags: [Record]
 ---
 
 
