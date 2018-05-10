@@ -28,7 +28,7 @@ Java代码会经过编译器编译成class文件(字节码文件)，再把class�
 #### 3 解析Resolution
 1. 将符号引用替换为直接引用。
 2. 如某个类 继承java.lang.object这个符号，直接引用就是直接找到java.lang.object所在的内存地址，建立直接引用关系。
-3. 符号引用：一组符号来描述目标，可以时任意字面量。
+3. 符号引用：一组符号来描述目标，可以是任意字面量。
 4. 直接引用：直接指向目标的指针，相对偏移量，或一个间接定位到目标的句柄。
 5. 包括类和接口的解析，字段解析，类方法解析，接口方法解析。
 
@@ -47,7 +47,7 @@ Java代码会经过编译器编译成class文件(字节码文件)，再把class�
 3. 没有父类加载器。
 
 ### 2 扩展Extension类加载
-1. 是指sun.misc.Launcher$ExtClassLoader类，由java语音实现。
+1. 是指sun.misc.Launcher$ExtClassLoader类，由java语言实现。
 2. 是Launcher的静态内部类。负责加载<JAVA_HOME>/lib/ext目录下或由系统变量-Djava.ext.dir指定位路径中的类库。
 3. 父类为null。
 4. 使用
@@ -105,15 +105,24 @@ private static File[] getExtDirs() {
 2. 考虑安全因素，java核心API定义中定义类型不会被随意替换，父类加载失败，子类自行加载核心API包时，需访问权限，或报安全异常。
 
 ## 四 类与类加载器
+1. 查看类加载器所加载的类
+	* ClassLoader有一个private字段classes，它是一个Vector，包含了这个类加载	器已经加载了的类的Class对象(之所以设置它是为了防止它们被gc)。
 
-
+	```
+	Field f = ClassLoader.class.getDeclaredField("classes");
+	f.setAccessible(true);
+	f.get(某个类加载器);
+	如 Vector classed = (Vector)f.get(ClassLoader.getSystemClassLoader());
+	```
+	
+	* 添加jvm参数 `-XX:+TraceClassLoading`
 
 
 
 
 
 > 参考文章
-![深入理解Java类加载器(ClassLoader)](https://blog.csdn.net/javazejian/article/details/73413292)
+[深入理解Java类加载器(ClassLoader)](https://blog.csdn.net/javazejian/article/details/73413292)
 
 
 
