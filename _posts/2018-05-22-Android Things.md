@@ -31,22 +31,6 @@ tags: [Android]
 #### 1.1 Home Activity Support主页面
 1. 系统启动自动加载的入口。在AndroidManifest中必须包含`CATEGORY_DEFAULT and CATEGORY_HOME`。
 
-	```
-	<activity android:name=".HomeActivity">
-       <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
-            <category android:name="android.intent.category.LAUNCHER"/>
-        </intent-filter>
-
-        <!-- 自动启动Activity，如果终止了则重启。 Launch activity automatically on boot, and re-launch if the app terminates. -->
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
-            <category android:name="android.intent.category.HOME"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-        </intent-filter>
-    </activity>
-	```
-
 #### 1.2 Device Updates设备更新
 1. Apps可通过`Android Things Console控制台`控制和监听OTA(over the air)的进程。
 2. 使用`UpdateManager`去设置更新策略和配置OTA更新之后的重启行为。
@@ -190,7 +174,7 @@ tags: [Android]
 #### 1.1 创建一个工程
 1. Prerequisites 预备知识，先决条件
 2. Get Started
-3. Add Library- ` compileOnly 'com.google.android.things:androidthings:+'`
+3. Add Library —— ` compileOnly 'com.google.android.things:androidthings:+' `
 4. Add `HomeActivity`
 	* Action: ACTION_MAIN
 	* Category: CATEGORY_DEFAULT
@@ -224,7 +208,7 @@ tags: [Android]
 5. 阴极接地。
 
 #### 1.3 与外设交互
-1. GPOP——General Purpose Input Output
+1. GPOP —— General Purpose Input Output
 2. 使用Peripheral I/O API——找到GPIO端口，并且交互。
 3. 可用的外设 `PeripheralManager.getInstance().getGpioList()`.
 4. 处理button事件
