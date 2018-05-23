@@ -168,26 +168,440 @@ tags: [Android]
 ## 一 Developer Kits
 
 
+### 1. Get Started
 
 
+#### 1.1 Recommended Kits 
+1. 提供SoM, carrier board, peripherals.
+2. NXP i.MX7D Starter Kit
+3. Raspberry Pi Kit
+4. Other Kit
 
-
-
-
+#### 1.2 设置开发环境
+1. 下载最新AS
+2. 使用API27：Android8.1(Oreo),选择Android Things。
+3. 创建一个Things App.
 
 
 ## 二 Build Apps
 
+### 1. 创建1个Android Things 工程
+
+#### 1.1 创建一个工程
+1. Prerequisites 预备知识，先决条件
+2. Get Started
+3. Add Library- ` compileOnly 'com.google.android.things:androidthings:+'`
+4. Add `HomeActivity`
+	* Action: ACTION_MAIN
+	* Category: CATEGORY_DEFAULT
+	* Category: CATEGORY_HOME
+
+```
+<application>
+    <uses-library android:name="com.google.android.things"/>
+    <activity android:name=".HomeActivity">
+        <!-- Launch activity as default from Android Studio -->
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
+
+        <!-- Launch activity automatically on boot, and re-launch if the app terminates. -->
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.HOME"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
+    </activity>
+</application>
+```
+
+#### 1.2 连接硬件
+1. 连接一侧按钮选择GPIO输入插口，另一边接地。
+2. 连接相同的GPIO输入插口通上3.3V的电。
+3. 选择GPIO输出连接到另一侧的串联电阻器。
+4. 另一边的电阻连接到阳极一侧。
+5. 阴极接地。
+
+#### 1.3 与外设交互
+1. GPOP——General Purpose Input Output
+2. 使用Peripheral I/O API——找到GPIO端口，并且交互。
+3. 可用的外设 `PeripheralManager.getInstance().getGpioList()`.
+4. 处理button事件
+
+	```
+		import com.google.android.things.pio.PeripheralManager;
+	import com.google.android.things.pio.Gpio;
+	import com.google.android.things.pio.GpioCallback;
+	
+	public class ButtonActivity extends Activity {
+    private static final String TAG = "ButtonActivity";
+    private static final String BUTTON_PIN_NAME = ...; // GPIO port wired to the button
+
+    private Gpio mButtonGpio;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        PeripheralManager manager = PeripheralManager.getInstance();
+        try {
+            // Step 1. Create GPIO connection.
+            mButtonGpio = manager.openGpio(BUTTON_PIN_NAME);
+            // Step 2. Configure as an input.
+            mButtonGpio.setDirection(Gpio.DIRECTION_IN);
+            // Step 3. Enable edge trigger events.
+            mButtonGpio.setEdgeTriggerType(Gpio.EDGE_FALLING);
+            // Step 4. Register an event callback.
+            mButtonGpio.registerGpioCallback(mCallback);
+        } catch (IOException e) {
+            Log.e(TAG, "Error on PeripheralIO API", e);
+        }
+    }
+
+    // Step 4. Register an event callback.
+    private GpioCallback mCallback = new GpioCallback() {
+        @Override
+        public boolean onGpioEdge(Gpio gpio) {
+            Log.i(TAG, "GPIO changed, button pressed");
+
+            // Step 5. Return true to keep callback active.
+            return true;
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Step 6. Close the resource
+        if (mButtonGpio != null) {
+            mButtonGpio.unregisterGpioCallback(mCallback);
+            try {
+                mButtonGpio.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error on PeripheralIO API", e);
+            }
+        }
+    }
+}
+	```
+5. Blink闪烁LED—— 在LED上连接GPIO，执行闪烁图案。
+
+	```
+	import com.google.android.things.pio.PeripheralManager;
+	import com.google.android.things.pio.Gpio;
+	...
+	
+	public class BlinkActivity extends Activity {
+	    private static final String TAG = "BlinkActivity";
+	    private static final int INTERVAL_BETWEEN_BLINKS_MS = 1000;
+	    private static final String LED_PIN_NAME = ...; // GPIO port wired to the LED
+
+    private Handler mHandler = new Handler();
+
+    private Gpio mLedGpio;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Step 1. Create GPIO connection.
+        PeripheralManager manager = PeripheralManager.getInstance();
+        try {
+            mLedGpio = manager.openGpio(LED_PIN_NAME);
+            // Step 2. Configure as an output.
+            mLedGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+
+            // Step 4. Repeat using a handler.
+            mHandler.post(mBlinkRunnable);
+        } catch (IOException e) {
+            Log.e(TAG, "Error on PeripheralIO API", e);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Step 4. Remove handler events on close.
+        mHandler.removeCallbacks(mBlinkRunnable);
+
+        // Step 5. Close the resource.
+        if (mLedGpio != null) {
+            try {
+                mLedGpio.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error on PeripheralIO API", e);
+            }
+        }
+    }
+
+    private Runnable mBlinkRunnable = new Runnable() {
+        @Override
+        public void run() {
+            // Exit if the GPIO is already closed
+            if (mLedGpio == null) {
+                return;
+            }
+
+            try {
+                // Step 3. Toggle the LED state
+                mLedGpio.setValue(!mLedGpio.getValue());
+
+                // Step 4. Schedule another event after delay.
+                mHandler.postDelayed(mBlinkRunnable, INTERVAL_BETWEEN_BLINKS_MS);
+            } catch (IOException e) {
+                Log.e(TAG, "Error on PeripheralIO API", e);
+            }
+        }
+    };
+}
+	
+	```
+
+#### 1.4 整合外设
+1. 使用`userDriverManager`绑定外设到Android Fragment。
+2. 初始设备library
+	* `compile 'com.google.android.things.contrib:driver-button:0.6'`
+	* 不同的drivers需要不同的权限，`<uses-permission android:name="com.google.android.things.permission.MANAGE_INPUT_DRIVERS" />`
+	* 连接
+	
+	```
+	ButtonInputDriver mButtonInputDriver = new ButtonInputDriver(
+                    BUTTON_PIN_NAME,
+                    Button.LogicState.PRESSED_WHEN_LOW,
+                    KeyEvent.KEYCODE_SPACE);
+    
+    mButtonInputDriver.close();//关闭连接	
+	```
+3. 绑定Framework
+	* 注册一个`ButtonInputDriver`外设作为framework的key input.
+
+	```
+	mButtonInputDriver.register();
+	mButtonInputDriver.unregister();
+	```
 
 
+### 2. 连接无线设备
+
+#### 1. Bluetooth
+1. 权限 `MANAGE_BLUETOOTH, BLUETOOTH, BLUETOOTH_ADMIN`.
+2. 配置设备属性
+	* 创建`BluetoothClass`,`BluetoothConfigManager. setBluetoothClass(BluetoothClassFactory.build(XX, XX));`
+	* I/O 功能 `manager.setIoCapability(BluetoothConfigManager.IO_CAPABILITY_IO);`
+	*  启用配置文件，使用`BluetoothProfileManager.enableAndDisableProfiles();`
+3. 配对远程设备——`BluetoothConnectionManager， BluetoothPairingCallback, PairingParams `
+
+	```
+	mBluetoothConnectionManager.(un)registerPairingCallback(mBluetoothPairingCallback);
+	
+	private BluetoothPairingCallback mBluetoothPairingCallback = new BluetoothPairingCallback() {
+
+        @Override
+        public void onPairingInitiated(BluetoothDevice bluetoothDevice,
+                PairingParams pairingParams) {
+            // Handle incoming pairing request or confirmation of outgoing pairing request
+            handlePairingRequest(bluetoothDevice, pairingParams);
+        }
+
+        @Override
+        public void onPaired(BluetoothDevice bluetoothDevice) {
+            // Device pairing complete
+        }
+
+        @Override
+        public void onUnpaired(BluetoothDevice bluetoothDevice) {
+            // Device unpaired
+        }
+
+        @Override
+        public void onPairingError(BluetoothDevice bluetoothDevice,
+                BluetoothPairingCallback.PairingError pairingError) {
+            // Something went wrong!
+        }
+    };
+    
+    private void handlePairingRequest(BluetoothDevice bluetoothDevice, PairingParams pairingParams) {
+    switch (pairingParams.getPairingType()) {
+        case PairingParams.PAIRING_VARIANT_DISPLAY_PIN:
+        case PairingParams.PAIRING_VARIANT_DISPLAY_PASSKEY:
+            // Display the required PIN to the user
+            Log.d(TAG, "Display Passkey - " + pairingParams.getPairingPin());
+            break;
+        case PairingParams.PAIRING_VARIANT_PIN:
+        case PairingParams.PAIRING_VARIANT_PIN_16_DIGITS:
+            // Obtain PIN from the user
+            String pin = ...;
+            // Pass the result to complete pairing
+            mBluetoothConnectionManager.finishPairing(bluetoothDevice, pin);
+            break;
+        case PairingParams.PAIRING_VARIANT_CONSENT:
+        case PairingParams.PAIRING_VARIANT_PASSKEY_CONFIRMATION:
+            // Show confirmation of pairing to the user
+            ...
+            // Complete the pairing process
+            mBluetoothConnectionManager.finishPairing(bluetoothDevice);
+            break;
+    }
+}
+	```
+
+4. 连接设备——`BluetoothConnectionManager, BluetoothConnectionCallback, ConnectionParams `
+
+	```
+	 mBluetoothConnectionManager.(un)registerConnectionCallback(mBluetoothConnectionCallback);
+   
+	// Set up callbacks for the profile connection process.
+    private final BluetoothConnectionCallback mBluetoothConnectionCallback = new BluetoothConnectionCallback() {
+        @Override
+        public void onConnectionRequested(BluetoothDevice bluetoothDevice, ConnectionParams connectionParams) {
+            // Handle incoming connection request
+            handleConnectionRequest();
+        }
+
+        @Override
+        public void onConnectionRequestCancelled(BluetoothDevice bluetoothDevice, int requestType) {
+            // Request cancelled
+        }
+
+        @Override
+        public void onConnected(BluetoothDevice bluetoothDevice, int profile) {
+            // Connection completed successfully
+        }
+
+        @Override
+        public void onDisconnected(BluetoothDevice bluetoothDevice, int profile) {
+            // Remote device disconnected
+        }
+    };
+    
+    private void handleConnectionRequest(BluetoothDevice bluetoothDevice, ConnectionParams connectionParams) {
+    // Determine whether to accept the connection request
+    boolean accept = false;
+    if (connectionParams.getRequestType() == ConnectionParams.REQUEST_TYPE_PROFILE_CONNECTION) {
+        accept = true;
+    }
+
+    // Pass that result on to the BluetoothConnectionManager
+    mBluetoothConnectionManager.confirmOrDenyConnection(bluetoothDevice, connectionParams, accept);
+}
+	```	
 
 
+#### 2. LoWPAN
+1. Low-Power —— Wireless Personal Area Networks无线局域网
+2. 功能：
+	* 扫描附近的低功耗无线网状网络
+	* 加入网络
+	* 形成一个低功耗无线网状网络
+	* 为保证设备可以交互，它们相互之间的网络参数(network identity/credential)都必须一致 —— `LowpanIndentity, LowpanCredential`
+3. 权限—— `ACCESS_LOWPAN_STATE, CHANGE_LOWPAN_STATE`
+4. 连接—— `LowpanInterface LowpanManager`
+	* 得到LowpanInterface `LowpanManager.getInstance().getInterface();`
+	* 释放 `LowpanInterface.leave()`
+5. 扫描附近的网络——`LowpanScanner `
+	
+	```
+	mLowpanInterface.createScanner();
+    mLowpanScanner.setCallback(mScanCallback);
+    mLowpanScanner.startNetScan();
+    
+    private LowpanScanner.Callback mScanCallback = new LowpanScanner.Callback() {
+    @Override
+    public void onNetScanBeacon(LowpanBeaconInfo beacon) {
+        LowpanIdentity network = beacon.getLowpanIdentity();
+        Log.d("LoWPAN", "Network Beacon: " + network.getName());
+
+    }
+
+    @Override
+    public void onScanFinished() {
+        // Release a semaphore
+    }
+};
+	```
+6. 加入已存在的网络——`LowpanProvisioningParams `
+
+	```
+	private void joinNetwork(LowpanInterface lowpanInterface) throws LowpanException {
+
+    final LowpanIdentity identity = new LowpanIdentity.Builder()
+            .setName("YourNetwork")
+            .setXpanid("DEBA7AB1E5EAF00D")
+            .setPanid(0x1337)
+            .setChannel(15)
+            .build();
+
+    final LowpanCredential credential = LowpanCredential
+            .createMasterKey("00112233445566778899AABBCCDDEEFF");
+
+    final LowpanProvisioningParams provision = new LowpanProvisioningParams.Builder()
+            .setLowpanIdentity(identity)
+            .setLowpanCredential(credential)
+            .build();
+
+    lowpanInterface.join(provision);
+}
+	```
+7. 创建一个新的网络 —— 需要与存在的网络对比
+	
+	```
+	private void formNetwork(LowpanInterface lowpanInterface) throws LowpanException {
+
+    /* We are only specifying the network name here. By
+     * doing this we allow the interface to pick reasonable
+     * defaults for other required fields. If we specified
+     * our own values for those fields, they would be used
+     * instead.
+     */
+    final LowpanIdentity identity = new LowpanIdentity.Builder()
+            .setName("MyNetwork")
+            .build();
+
+    /* Not specifying a LowpanCredential here tells “form()”
+     * that we want the interface to generate the master key
+     * for us.
+     */
+    final LowpanProvisioningParams provision = new LowpanProvisioningParams.Builder()
+            .setLowpanIdentity(identity)
+            .build();
+
+    lowpanInterface.form(provision);
+}
+	```
+
+8. 监听连接状态 —— `LowpanInterface.Callback`
+
+	```
+	 LowpanInterface.(un)registerCallback(mCallback);
+	 private LowpanInterface.Callback mCallback = new LowpanInterface.Callback() {
+
+        @Override
+        public void onStateChanged(int state) {
+            /* Handle interface state changes. */
+        }
+
+        @Override
+        public void onLowpanIdentityChanged(LowpanIdentity identity) {
+            /* Form, join, or leave completed successfully. */
+        }
+
+        @Override
+        public void onProvisionException(Exception exception) {
+            /* An error occurred during form or join. */
+        }
+    };
+	```
 
 
+### 3. 配置设备
+
+### 4. 与外围设备交互
 
 
-
-
+### 5. 用户空间驱动
 
 
 ## 三 Prototype Devices
