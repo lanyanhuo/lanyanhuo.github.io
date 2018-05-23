@@ -16,7 +16,7 @@ tags: [Android]
 3. Repid prototypes to real products 快速原型到真正的产品
 4. Security and scalability 提供了安全性和可扩展性
 
-### 主题
+### 1. 主题
 1. Get a kit 硬件，外围设备的Kit教程
 2. Build a Things app 
 3. Build a Things prototype硬件的基本知识并且开始成型设备
