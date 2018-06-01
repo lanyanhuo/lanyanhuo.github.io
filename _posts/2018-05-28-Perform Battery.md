@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Battery
+title: Perform Battery
 category: Android
 tags: [Android]
 ---
