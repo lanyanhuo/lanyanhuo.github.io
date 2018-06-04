@@ -6,6 +6,117 @@ tags: [Android]
 ---
 
 # OOM
+1. 触发条件: allocated + 新分配的内存 >= getMemoryClass()
+2. 会导致不再引用的对象无法即使释放，占用内存，后续需要分配时因为内存不足引起OOM。
+
+## 避免OOM
+### 1. 减少对象的内存占用
+
+#### 1.1 使用轻量的数据结构
+1. 使用Android专用的ArrayMap/SparseMap。
+2. SparseArray避免了key与Value的自动装箱(autoboxing),也不需要拆箱。
+
+#### 1.2 避免使用Enum
+
+#### 1.4 减少Bitmap对象的内存占用
+1. Bitmap极易消耗内存
+	* inSampleSize: 缩放比例，在把图片载入内存之前，计算出一个合适的比例，避免不必要的大图载入。
+	* decode format: 解码格式，ARGB_8888/RBG_565/ARGB_4444/ALPHA_8，占用的字节也有差异。
+
+
+### 2. 内存对象的重复利用
+#### 2.1 复用系统自带的资源
+1. Android系统内置的资源：String，color，image, animation, style, layout等等，直接引用即可。
+
+#### 2.2 在ListView/GridView等对ConvertView的复用
+
+#### 2.3 Bitmap对象复用
+1. 使用LRU(Least Recently used)
+2. 利用inBitmap高级属性，告知Bitmap解码器尝试去使用已经存在内存中的那张Bitmap，所以仅仅只需要占用屏幕锁能显示的图片数量大小的内存而已。不会在堆中创建多个Bitmap。
+3. inBitmap的条件
+	* API 19，新申请的Bitmap比较<=内存中已存在的Bitmap大小。
+	* 必须有相同的解码格式
+	* 对待不同解码格式，可以申请Bitmap对象池，创建时就能在内存中找到合适的Bitmap去重用。
+4. BitmapFactory.Options中inNativeAlloc是扩大内存，要慎用。
+
+#### 2.4 避免在onDraw中执行对象的创建
+1. 频繁创建对象，迅速增加内存。
+2. 会引起频繁gc，甚至内存抖动。
+
+#### 2.5 StringBuilder的使用
+1. 大量String拼接，可使用StringBuilder代替。
+
+
+### 3. 避免对象的内存泄漏
+
+#### 3.1 注意Activity的泄漏
+1. 内部类持有Activity的引用
+2. 典型场景是内部类Handler持有Activity的引用，如果Handler中有延迟任务，或等待执行的任务列过长，在Activity关闭后去执行任务，而导致Activity泄漏。即Looper -> MessageQueue -> Handler -> Activity.
+3. 解决以上问题
+	* 在Activity onDestroy时就remove Handler队列中的消息与Runnable。
+	* 使用static + WeakReference 来断开Handler与Activity之间存在的引用。
+4. 内部类尽量使用static + WeakReference。
+
+
+#### 3.2 使用Application Context 而不是Activity Context
+
+#### 3.3 注意临时Bitmap对象的及时回收
+1. 调用Source Bitmap Recycle时一定要去检查Source Bitmap与return Bitmap引用是否相同。
+
+#### 3.4 注意Listener的注销
+1. register 和 unRegister一定要一起使用。
+
+#### 3.5 WebView的泄漏
+1. 为WebView开启另外一个线程，通过AIDL与主线程进行通信。在合适的时机进行销毁。
+
+#### 3.6 注意Cursor file Stream等是否及时关闭
+
+
+### 4. 内存优化策略
+
+#### 4.1 谨慎使用Large Heap
+1. getMemoryClass()来检查实际获取到的heap大小
+
+#### 4.2 综合考虑内存阈值与其他因素 设计合适的缓存大小
+1. 应用程序剩下了多少可用的内存空间?
+2. 有多少图片会被一次呈现到屏幕上？有多少图片需要事先缓存好以便快速滑动时能够立即显示到屏幕？
+3. 设备的屏幕大小与密度是多少? 一个xhdpi的设备会比hdpi需要一个更大的Cache来hold住同样数量的图片。
+4. 不同的页面针对Bitmap的设计的尺寸与配置是什么，大概会花费多少内存？
+5. 页面图片被访问的频率？是否存在其中的一部分比其他的图片具有更高的访问频繁？如果是，也许你想要保存那些最常访问的到内存中，或者为不同组别的位图(按访问频率分组)设置多个LruCache容器。
+
+#### 4.3 onLowMemory() onTrimMemory()
+
+
+#### 4.4 资源文件需要选择合适的文件夹存放
+1. hdpi/xhdpi/xxhdpi
+2. 不希望被拉伸的图片，需要放到assets或者nodpi的目录下。
+
+#### 4.5 try catch某个大内存分配操作
+1. catch OOM，然后做一些降级的内存分配操作。如decode Bitmap时，catch OOM，就尝试把采样比例增加一倍，再decode。
+
+#### 4.6 谨慎使用static对象
+#### 4.7 单例对象中不合理的持有
+#### 4.8 Services资源—— 尽量使用Intent Service
+#### 4.10 谨慎使用abstract编程
+1. 抽象会导致一个显著的额外内存开销？
+
+#### 4.11 使用nano protobufs序列化数据
+1. Protocol buffers是Google为序列化结构数据而设计，与语言，平台都无关。
+2. 具有良好的扩展性，类似XML，但比XML更加快速，简单。
+3. 如果需要为数据实现序列化和协议化，可使用nano protobufs。
+4. 找了2篇还不错的文章。
+	* [在Android中使用Protocol Buffers](https://www.jianshu.com/p/e8712962f0e9) 使用插件protobuf-gradle-plugin 
+	* [Google Protocol Buffer 的使用和原理](https://www.ibm.com/developerworks/cn/linux/l-cn-gpb/index.html)
+
+#### 4.12 谨慎使用依赖注入
+1. 使用依赖注入DI(Dependency Injection)可以简化代码,在Java中称为注解Annotation
+2. 常用的[Dragger](https://www.jianshu.com/p/cd2c1c9f68d4)
+3. 做法：目标类(需进程初始化的类)依赖其他的类进行初始，而不是手动编码，这是通过注解方式将其他类的实例注入到目标类中。
+4. 
+#### 4.13 谨慎使用多线程
+#### 4.14 使用不同的方式优化内存占用
+
+
 
 ## 一 Android Device Monitor设备监视器
 1. `DDMS`——Dalvik Debug Monitor Service，Android Studio 3.0中弃用。
@@ -165,7 +276,7 @@ tags: [Android]
 
 ### 6. Network Profiler 
 	
-## LeakCanary检测内存
+## 四 LeakCanary检测内存
 1. 直接对.hprof文件进行分析，找到对象的引用链。
 2. 在build.gradle文件中添加
 
@@ -184,10 +295,10 @@ tags: [Android]
 
 
 
-## 四 TraceView
+## 五 TraceView
 
 
-## 五 systrace
+## 六 systrace
 1. systrace 命令允许在系统级别手机和检查设备上所有进程的信息。将内核数据(CPU调度城促，磁盘活动和应用程序的线程)组合为HTML报告。
 2. 需要安装python，并且连接到设备。
 3. python(不支持python3) systrace.py [options] [categories]
@@ -207,7 +318,7 @@ tags: [Android]
 ### 2. 调查UI性能问题
 1. 分析
 
-## 六 MAT——Memory Analyzer
+## 七 MAT——Memory Analyzer
 1. JVM记录系统的运行状态，将其存贮在堆转储Heap Dump文件中。
 2. 可通过MAT分析OOM。
 3. MAT统计 size:2.2MB Classes:3.3k Objects:50.1k ClassLoader:84 Unreachable Objects Histogram
@@ -294,6 +405,7 @@ tags: [Android]
 5. [Memory Analyzer Tool 使用手记](http://wensong.iteye.com/blog/1986449)
 6. [使用新版Android Studio检测内存泄露和性能](https://blog.csdn.net/yangxi_pekin/article/details/51860998)
 7. [TraceView使用](https://blog.csdn.net/hpc19950723/article/details/53574674)
+8. [Android内存优化之OOM](https://blog.csdn.net/jdsjlzx/article/details/49107183)
 
 
 

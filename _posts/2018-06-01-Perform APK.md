@@ -29,13 +29,19 @@ tags: [Android]
 
 ## 三 Proguard混淆
 1. 可以删除注释和不用的代码。
-2. 将java文件名改成短名a.java，b.java 
-3. 方法名等 CommonUtil.getDisplayMetrix(); –> a.a()
+2. 将java代码重命名a.java，b.java 
+3. 对域和方法重命名等 CommonUtil.getDisplayMetrix(); –> a.a()
 4. [微信混淆打包](https://github.com/shwenzhang/AndResGuard)
+5. 通过压缩，优化和混淆，使得代码更加紧凑。减少mapping代码所需要的内存空间。
 
 ## 四 资源
 1. 动态加载：emoji表情、换肤、动态下载的资源、一些模块的插件化动态添加。
-2. 
+
+
+
+## 五 第三方library
+1. 多个library可能功能会有冲突，如果一种使用的是nano protobufs,另一种使用micro protobufs，就会有冲突。同样冲突可能在logcat，load Image，cache等模块中。
+2. 如果仅使用library的一个小功能，可以尝试去实现。
 
 
 #### 参考文章
