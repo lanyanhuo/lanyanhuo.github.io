@@ -46,6 +46,30 @@ tags: [Android]
 
 ### 1. 生命周期
 
+#### 1.1 主要
+1. onCreate(Bundle savedInstanceState)：创建activity时调用。设置在该方法中，还以Bundle的形式提供对以前储存的任何状态的访问！
+2. onStart()：activity变为在屏幕上对用户可见时调用。(onRestart()之后也会调用）
+3. onResume()：activity开始与用户交互时调用（无论是启动还是重新启动一个活动，该方法总是被调用的）。
+4. onPause()：activity被暂停或收回cpu和其他资源时调用，该方法用于保存活动状态的，也是保护现场，压栈吧！
+5. onStop()：activity被停止并转为不可见阶段及后续的生命周期事件时调用。
+6. onRestart()：重新启动activity时调用。该活动仍在栈中，而不是启动新的活动。 
+7. OnDestroy()：activity被完全从系统内存中移除时调用，该方法被 2.横竖屏切换时候activity的生命周期
+
+#### 1.2 横竖屏切换时
+1. 不设置Activity的android:configChanges时，切屏会重新调用各个生命周期，切横屏时会执行一次，切竖屏时会执行两次
+2. 设置Activity的android:configChanges="orientation"时，切屏还是会重新调用各个生命周期，切横、竖屏时只会执行一次
+3. 设置Activity的android:configChanges="orientation|keyboardHidden"时，切屏不会重新调用各个生命周期，只会执行onConfigurationChanged方法   orientation|screenSize
+
+#### 1.3 按下Home, 或被其他Activity覆盖
+1. onPause -> onStop
+2. 重新回到应用 onRestart -> onStart -> onResume
+
+#### 1.4 A，B之间跳转
+1. A->B: 
+	* B为透明时，A只执行onPause
+	* A onPause(不要做耗时操作); B onCreate -> onStart -> onResume; A onStop
+2. B->A: B onPause; A onRestart -> onStart -> onResume; B onStop -> onDestroy
+
 
 ### 2. 启动方式以及应用场景，Activity栈
 1. standard Mode
@@ -74,14 +98,43 @@ tags: [Android]
 	* FLAG_ACTIVITY_BROUGHT_TO_FRONT, —— 栈中有A，在A中以这种模式启动B，B在正常启动C,D，此时栈的情况就是A,C,D,B。
 
 ### 3. 状态保存与恢复
+1. onCreate参数savedInstanceState == null，从而恢复数据
+2. savedInstanceState是一个Bundle对象。
+
+#### 3.1 onSaveInstanceState
+
+#### 3.2 onRestoreInstanceState
+
+### 4. 其他情况
+1. Activity作为对话框
+	* 设置为Dialog，android:theme="@style/Theme.Dialog".
+	* Activity设置成半透明的对话框，设置如下主题即可：android:theme=”@android:style/Theme.Translucent” 
 
 
 
 ## 二 Fragment
 
 ### 1. 生命周期
+1. 打开onAttach-> onCreate-> onCreateView->onActivityCreated->onStart->onResume 
+2. 退出onPause->onStop->onDestroyView->onDestroy->onDetach
+3. onAttach(Activity):当Fragment和Activity发生关联时使用
+4. onCreateView(LayoutInflater, ViewGroup, Bundle):创建该Fragment的视图
+5. onActivityCreate(Bundle):当Activity的onCreate方法返回时调用
+6. onDestoryView():与onCreateView相对应，当该Fragment的视图被移除时调用
+7. onDetach():与onAttach相对应，当Fragment与Activity关联被取消时调用   
+8. 注意: 除了onCreateView，其他的所有方法如果你重写了，必须调用父类对于该方法的实现
+
+#### 1.1 其他情况
+1. 屏幕灭掉,回到桌面 onPause-> onSaveInstanceState->onStop
+2. 屏幕解锁 onStart-> onResume
+3. 切换到其他Fragment `onPause->onStop->onDestroyView`
+4. 切换回本身的Fragment `onCreateView-> onActivityCreated->onStart-> onResume`
 
 ### 2. Fragment滑动，传递数据的方式
+1. android.app.Fragment 主要用于定义Fragment
+2. android.app.FragmentManager 主要用于在Activity中操作Fragment
+3. android.app.FragmentTransaction 保证一些列Fragment操作的原子性，熟悉事务这个词
+主要的操作都是FragmentTransaction的方法
 
 ### 5. 如何在Adapter使用中解耦
 
@@ -357,11 +410,12 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 ### 1. ContentProvider,ContentResolver, ContentObserver
 1. ContentProvider
 	* 管理数据，提供数据的增删改查。
-	* 数据源可以时db,file,xml,url等。
+	* 数据源可以是db,file,xml,url等。
 	* 为这些数据访问提供了统一的接口，进程间数据共享。
 2. ContentResolver
-	* 使用不同url操作不同ContentProvider中的数据
+	* 使用不同url操作不同ContentProvider中的数据。
 	* 外部进程通过ContentResolver与ContentProvider进行交互。
+	* 
 3. ContentObserver：观察ContentProvider数据变化，通知外界。
 
 ### 2. 权限管理
@@ -370,12 +424,16 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 3. URL控制
 
 ### 3. 系统为什么会设计ContentProvider
-
-
+1. 意义：应用间数据共享的一种方式。比如通讯录、短信。
+2. 封装：对数据进行封装，提供统一的接口，使用者不必关心数据源
 
 
 ## 六 Intent
 
+#### 1. Android里的Intent传递的数据有大小限制吗，如何解决？
+1. Intent传递数据大小的限制大概在1M左右，超过这个限制就会静默崩溃。处理方式如下：
+2. 进程内：EventBus，文件缓存、磁盘缓存。
+3. 进程间：通过ContentProvider进行款进程数据共享和传递。
 
 ## 七 Binder
 1. Android Binder是用来做进程通信的，Android的各个应用以及系统服务都运行在独立的进程中，它们的通信都依赖于Binder。
@@ -394,6 +452,9 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 3. 高性能：从数据拷贝次数来看Binder只需要进行一次内存拷贝，而管道、消息队列、Socket都需要两次，共享内存不需要拷贝，Binder的性能仅次于共享内存。
 4. 稳定性：上面说到共享内存的性能优于Binder，那为什么不适用共享内存呢，因为共享内存需要处理并发同步问题，控制负责，容易出现死锁和资源竞争，稳定性较差。而Binder基于C/S架构，客户端与服务端彼此独立，稳定性较好。
 5. 安全性：我们知道Android为每个应用分配了UID，用来作为鉴别进程的重要标志，Android内部也依赖这个UID进行权限管理，包括6.0以前的固定权限和6.0以后的动态权限，传荣IPC只能由用户在数据包里填入UID/PID，这个标记完全是在用户空间控制的，没有放在内核空间，因此有被恶意篡改的可能，因此Binder的安全性更高。
+
+绘制
+1. onMeasure 
 
 ## 八 进程
 
