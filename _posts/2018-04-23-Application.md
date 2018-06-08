@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Application
-category: Android
-tags: [Android]
+category: Audition
+tags: [Audition]
 ---
 
 ## Application
@@ -41,6 +41,14 @@ tags: [Android]
 4. ContentProvider：无法获取Application，因此此时Application不一定已经初始化。
 
 
+AlertDialog,popupWindow,Activity区别
+
+Application 和 Activity 的 Context 对象的区别
+
+### 3. 进程和 Application 的生命周期
+1. onCreate -> onTerminate -> onLowMemory -> onTrimMemory -> onConfigurationChanged
+
+
 ## 一 Activity
 1. SubClass: FragmentActivity， TabActivity， ListActivity（LauncherActivity, PreferenceActivity), AlasActivity,  ExpandableActivity, PreferenceActivity.
 
@@ -50,8 +58,8 @@ tags: [Android]
 1. onCreate(Bundle savedInstanceState)：创建activity时调用。设置在该方法中，还以Bundle的形式提供对以前储存的任何状态的访问！
 2. onStart()：activity变为在屏幕上对用户可见时调用。(onRestart()之后也会调用）
 3. onResume()：activity开始与用户交互时调用（无论是启动还是重新启动一个活动，该方法总是被调用的）。
-4. onPause()：activity被暂停或收回cpu和其他资源时调用，该方法用于保存活动状态的，也是保护现场，压栈吧！
-5. onStop()：activity被停止并转为不可见阶段及后续的生命周期事件时调用。
+4. onPause()：activity被暂停或收回cpu和其他资源时调用，该方法用于保存活动状态的。
+5. onStop()：activity被停止并转为不可见阶段及后续的生命周期事件时调用。(是否调用取决于新的activity有无透明部分)
 6. onRestart()：重新启动activity时调用。该活动仍在栈中，而不是启动新的活动。 
 7. OnDestroy()：activity被完全从系统内存中移除时调用，该方法被 2.横竖屏切换时候activity的生命周期
 
@@ -69,7 +77,30 @@ tags: [Android]
 	* B为透明时，A只执行onPause
 	* A onPause(不要做耗时操作); B onCreate -> onStart -> onResume; A onStop
 2. B->A: B onPause; A onRestart -> onStart -> onResume; B onStop -> onDestroy
-
+3. 使用Intent跳转
+	```
+		Intent intent = new Intent();    // 建立Intent 
+		intent.setClass(Forwarding.this, ForwardTarget.class);  // 设置活动
+		startActivity(intent);
+	```
+4. 带有返回值的跳转
+	```
+		static final private int GET_CODE = 0; 
+		startActivityForResult (intent, GET_CODE);
+		@Override 
+		 protected void onActivityResult(int requestCode, int resultCode, 
+		  Intent data) { 
+			if (requestCode == GET_CODE) {  
+				if (resultCode == RESULT_OK) { ... }
+			}
+		}// A 
+		 
+		//在B中
+		public void onClick(View v) { 
+			setResult(RESULT_OK, (new Intent()).setAction("Corky!")); 
+			finish(); 
+		}
+	``` 
 
 ### 2. 启动方式以及应用场景，Activity栈
 1. standard Mode
@@ -111,6 +142,13 @@ tags: [Android]
 	* Activity设置成半透明的对话框，设置如下主题即可：android:theme=”@android:style/Theme.Translucent” 
 
 
+### 5. 关闭
+1. 退出Activity直接finish即可。
+2. 抛异常强制退出,该方法通过抛异常，使程序Force Close。验证可以，但是，需要解决的问题是，如何使程序结束掉，而不弹出Force Close的窗口。
+3. 记录打开的Activity：每打开一个Activity，就记录下来。在需要退出时，关闭每一个Activity即可。
+4. 发送特定广播：在需要结束应用时，发送一个特定的广播，每个Activity收到广播后，关闭即可。
+5. 递归退出：在打开新的Activity时使用startActivityForResult，然后自己加标志，在onActivityResult中处理，递归关闭。最好定义一个Activity基类。
+
 
 ## 二 Fragment
 
@@ -134,9 +172,40 @@ tags: [Android]
 1. android.app.Fragment 主要用于定义Fragment
 2. android.app.FragmentManager 主要用于在Activity中操作Fragment
 3. android.app.FragmentTransaction 保证一些列Fragment操作的原子性，熟悉事务这个词
-主要的操作都是FragmentTransaction的方法
+4. 主要的操作都是FragmentTransaction的方法
+```
+	getFragmentManager().beginTranscation()
+		.addToBackStatck()
+		.replace(R.id.container, new MyFragment())
+		.commit();
+		
+	getFragmentManager().popBackStatck();
+```
 
 ### 5. 如何在Adapter使用中解耦
+
+Activity状态保存于恢复
+
+fragment各种情况下的生命周期
+
+Fragment状态保存startActivityForResult是哪个类的方法，在什么情况下使用？
+
+
+fragment之间传递数据的方式？
+
+
+如果在onStop的时候做了网络请求，onResume的时候怎么恢复？
+ViewPager使用细节，如何设置成每次只初始化当前的Fragment，其他的不初始化呢？
+
+
+### Fragment
+Activity与Fragment之间生命周期比较
+
+1. Fragment 在 ViewPager 里面的生命周期，滑动 ViewPager 的页面时 Fragment 的生命周期的变化；
+2. 为什么 Google 会推出Fragment ，有什么好处和用途？ 直接用 View 代替不行么？
+
+#### ViewPager
+1. 如何设置成每次只初始化当前的Fragment，其他的不初始化？
 
 
 ## 三 Service
@@ -387,12 +456,29 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 ### 1. 注册
 1. 静态注册：常驻系统，不受组件生命周期影响，即便应用退出，广播还是可以被接收，耗电、占内存。
 2. 动态注册：非常驻，跟随组件的生命变化，组件结束，广播结束。在组件结束前，需要先移除广播，否则容易造成内存泄漏。
+3. 生命周期只有十秒左右.
 
 ### 2. 分类
-1. BroadcastReceiver 是跨应用广播，利用Binder机制实现。
-2. LocalBroadcastReceiver 是应用内广播，利用Handler实现，利用了IntentFilter的match功能，提供消息的发布与接收功能，实现应用内通信，效率比较高。
-3. 普通广播：调用sendBroadcast()发送，最常用的广播。
-4. 有序广播：调用sendOrderedBroadcast()，发出去的广播会被广播接受者按照顺序接收，广播接收者按照Priority属性值从大-小排序，Priority属性相同者，动态注册的广播优先，广播接收者还可以选择对广播进行截断和修改。
+1. `BroadcastReceiver` 是跨应用广播，利用Binder机制实现。
+2. `LocalBroadcastReceiver` 是应用内广播，利用Handler实现，利用了IntentFilter的match功能，提供消息的发布与接收功能，实现应用内通信，效率比较高。
+3. `普通广播`：调用`sendBroadcast(Intent)`发送，最常用的广播。
+4. `有序广播`：
+	* 调用`sendOrderedBroadcast(Intent, receiverPermission)`
+	* 发出去的广播会被广播接受者按照顺序接收，广播接收者按照Priority属性值从大-小排序，Priority属性相同者，动态注册的广播优先，广播接收者还可以选择对广播进行截断和修改。
+	* 高级别的或同级别先接收到广播的可以通过abortBroadcast()方法截断广播使其他的接收者无法收到该广播.
+	* android:priority = "2147483647"最高优先级
+	```
+		<receiver android:name=".SMSBroadcastReceiver" >
+		　　<intent-filter android:priority = "2147483647" >
+		　　　　<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+		　　</intent-filter>
+		</receiver >
+	```
+5. `异步广播`：
+	* 普通 调用`sendStickyBroadcast(Intent)`
+	* 有序 调用`sendStickyOrderedBroadcast(intent, resultReceiver, scheduler,  initialCode, initialData, initialExtras)`
+	* 在AndroidManifest中需要添加`BROADCAST_STICKY`权限。
+	* 需要`removeStickyBroadcast(intent)`主动把它去掉.
 
 
 ### 3. 发送与接收原理
@@ -402,8 +488,22 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 4. ActivityManagerService查找符合相应条件的广播（IntentFilter/Permission）的BroadcastReceiver，将广播发送到BroadcastReceiver所在的消息队列中。
 5. BroadcastReceiver所在消息队列拿到此广播后，回调它的onReceive()方法。
 
+
+### 场景
+1. 电话呼入事件、数据网络可用通知或者到了晚上时进行通知。
+2. 闪背光灯，震动，播放声音。
 ### 6. 其他
 1. 如何通过Broadcast拦截abort一条短信
+
+
+
+广播是否可以请求网络？
+
+广播引起anr的时间限制是多少？
+
+
+本地广播和全局广播有什么差别？
+广播使用的方式和场景
 
 ## 五 ContentProvider
 
@@ -422,10 +522,80 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 1. 读写分离，
 2. 权限控制-精确到表级
 3. URL控制
+4. ContentProvider的权限管理(解答：读写分离，权限控制-精确到表级，URL控制)
 
 ### 3. 系统为什么会设计ContentProvider
 1. 意义：应用间数据共享的一种方式。比如通讯录、短信。
 2. 封装：对数据进行封装，提供统一的接口，使用者不必关心数据源
+3. 应用程序能够将它们的数据保存到文件或SQLite数据库中，甚至是任何有效的设备中。当需要将数据与其他的应用共享时，内容提供者将会很有用。一个内容提供者类实现了一组标准的方法，从而能够让其他应用程序保存或读取此内容提供者处理的各种数据类型。
+
+### 4. 使用
+```
+  <provider android:name=".PersonProvider" android:authorities="com.bravestarr.provider.personprovider"/>  
+  
+  public boolean onCreate();//处理初始化操作
+
+       /**        * 插入数据到内容提供者(允许其他应用向你的应用中插入数据时重写)
+        * @param uri
+        * @param initialValues 插入的数据
+        * @return
+        */
+       public Uri insert(Uri uri, ContentValues initialValues);
+
+       /** 从内容提供者中删除数据(允许其他应用删除你应用的数据时重写)
+        * @param uri
+        * @param selection 条件语句
+        * @param selectionArgs 参数
+        * @return
+        */
+       public int delete(Uri uri, String selection, String[] selectionArgs);
+
+       /** 更新内容提供者已存在的数据(允许其他应用更新你应用的数据时重写)
+        * @param uri
+        * @param values 更新的数据
+        * @param selection 条件语句
+        * @param selectionArgs 参数
+        * @return
+        */
+       public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs);
+       /** 返回数据给调用者(允许其他应用从你的应用中获取数据时重写)
+        * @param uri
+        * @param projection 列名
+        * @param selection 条件语句
+        * @param selectionArgs 参数
+        * @param sortOrder 排序
+        * @return
+        */
+       public Cursor query(Uri uri, String[] projection, String selection,  String[] selectionArgs, String sortOrder) ;         
+       /** 用于返回当前Uri所代表数据的MIME类型
+        * 如果操作的数据为集合类型(多条数据),那么返回的类型字符串应该为vnd.android.cursor.dir/开头
+        * 例如要得到所有person记录的Uri为content://com.bravestarr.provider.personprovider/person, 　　　　 * 那么返回的MIME类型字符串应该为"vnd.android.cursor.dir/person"
+        * 如果操作的数据为单一数据,那么返回的类型字符串应该为vnd.android.cursor.item/开头
+        * 例如要得到id为10的person记录的Uri为content://com.bravestarr.provider.personprovider/person/10, 　　　　 *　　　那么返回的MIME类型字符串应该为"vnd.android.cursor.item/person"
+        * @param uri
+        */
+       public String getType(Uri uri)
+
+```
+
+### 5. 结构
+1. Browser
+2. CallLog
+3. Contacts
+	* Groups
+	* People
+	* Phones
+	* Photos
+4. Images
+	* Thumbnails
+5. MediaStore
+	* Albums
+	* Artists
+	* Audio
+	* Genres
+	* Playlists
+6. Settings
+7. Video
 
 
 ## 六 Intent
@@ -435,9 +605,25 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 2. 进程内：EventBus，文件缓存、磁盘缓存。
 3. 进程间：通过ContentProvider进行款进程数据共享和传递。
 
+### 1. IntentFilter 
+1. 如果一个Activity要显示一个人的联系方式，则需要声明一个IntentFilter(它知道如何处理VIEW Action和联系方式的URI)。
+2. 需要在AndroidManifest中定义。
+3. startActivity之后，系统会在应用程序的IntentFilter中查找start的这个。
+4. 使用
+```
+	<intent-filter>
+	   <action android:name="android.intent.action.MAIN" />
+	   <category android:name="android.intent.category.LAUNCHER" />
+	</intent-filter>
+```
+
+### MAIN, VIEW, PICK, EDIT
+
+
+
+
 ## 七 Binder
 1. Android Binder是用来做进程通信的，Android的各个应用以及系统服务都运行在独立的进程中，它们的通信都依赖于Binder。
-
 
 ### 1. 为什么要使用Binder
 1. 为什么选用Binder，在讨论这个问题之前，我们知道Android也是基于Linux内核，Linux现有的进程通信手段有以下几种：
@@ -453,12 +639,21 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 4. 稳定性：上面说到共享内存的性能优于Binder，那为什么不适用共享内存呢，因为共享内存需要处理并发同步问题，控制负责，容易出现死锁和资源竞争，稳定性较差。而Binder基于C/S架构，客户端与服务端彼此独立，稳定性较好。
 5. 安全性：我们知道Android为每个应用分配了UID，用来作为鉴别进程的重要标志，Android内部也依赖这个UID进行权限管理，包括6.0以前的固定权限和6.0以后的动态权限，传荣IPC只能由用户在数据包里填入UID/PID，这个标记完全是在用户空间控制的，没有放在内核空间，因此有被恶意篡改的可能，因此Binder的安全性更高。
 
-绘制
-1. onMeasure 
+
+
+简述IPC？
+
+什么是AIDL？
+
+AIDL解决了什么问题？
+
+AIDL如何使用？
+
+Android 上的 Inter-Process-Communication 跨进程通信时如何工作的？
 
 ## 八 进程
 
-### 1. 前台进程
+### 1. 前台进程Foreground
 1. 用户当前操作所必需的进程。如果一个进程满足以下任一条件，即视为前台进程：
 	* 托管用户正在交互的 Activity（已调用 Activity 的 onResume() 方法）
 	* 托管某个 Service，后者绑定到用户正在交互的 Activity
@@ -467,22 +662,31 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 	* 托管正执行其 onReceive() 方法的 BroadcastReceiver
 2. 通常，在任意给定时间前台进程都为数不多。只有在内存不足以支持它们同时继续运行这一万不得已的情况下，系统才会终止它们。此时，设备往往已达到内存分页状态，因此需要终止一些前台进程来确保用户界面正常响应。
 
-### 2. 可见进程
+### 2. 可见进程Visible
 1. 没有任何前台组件、但仍会影响用户在屏幕上所见内容的进程。 如果一个进程满足以下任一条件，即视为可见进程：
 	* 托管不在前台、但仍对用户可见的 Activity（已调用其 onPause() 方法）。例如，如果前台 Activity 启动了一个对话框，允许在其后显示上一 Activity，则有可能会发生这种情况。
 	* 托管绑定到可见（或前台）Activity 的 Service。
 2. 可见进程被视为是极其重要的进程，除非为了维持所有前台进程同时运行而必须终止，否则系统不会终止这些进程。
 
-### 3. 服务进程
+### 3. 服务进程Service
 1. 正在运行已使用 startService() 方法启动的服务且不属于上述两个更高类别进程的进程。尽管服务进程与用户所见内容没有直接关联，但是它们通常在执行一些用户关心的操作（例如，在后台播放音乐或从网络下载数据）。因此，除非内存不足以维持所有前台进程和可见进程同时运行，否则系统会让服务进程保持运行状态。
 
-### 4. 后台进程
+### 4. 后台进程Background
 1. 包含目前对用户不可见的 Activity 的进程（已调用 Activity 的 onStop() 方法）。这些进程对用户体验没有直接影响，系统可能随时终止它们，以回收内存供前台进程、可见进程或服务进程使用。 
 2. 通常会有很多后台进程在运行，因此它们会保存在 LRU （最近最少使用）列表中，以确保包含用户最近查看的 Activity 的进程最后一个被终止。如果某个 Activity 正确实现了生命周期方法，并保存了其当前状态，则终止其进程不会对用户体验产生明显影响，因为当用户导航回该 Activity 时，Activity 会恢复其所有可见状态。
 
-### 5. 空进程
+### 5. 空进程Empty
 1. 不含任何活动应用组件的进程。保留这种进程的的唯一目的是用作缓存，以缩短下次在其中运行组件所需的启动时间。 为使总体系统资源在进程缓存和底层内核缓存之间保持平衡，系统往往会终止这些进程。
 2. ActivityManagerService负责根据各种策略算法计算进程的adj值，然后交由系统内核进行进程的管理。
+
+
+## 九 SettingPreferenc
+1. SP是进程同步的吗?有什么方法做到同步？
+
+
+## 十 AndroidManifest
+1. 动态权限适配方案，权限组的概念
+
 
 #### 参考文章
 1. [Android基础](https://github.com/guoxiaoxing/android-interview)
