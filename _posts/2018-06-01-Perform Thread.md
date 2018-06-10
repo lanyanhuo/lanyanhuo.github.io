@@ -18,6 +18,20 @@ tags: [Android]
 5. [源码分析](https://blog.csdn.net/liyuchong2537631/article/details/49760177)
 
 
+AsyncTask简介
+    • Asynctask具体用法？
+    • Asynctask的Do in background方法是怎么通知UI线程刷新进度条的？
+    • Asynctask的Do in background方法默认是返回 true ，表示任务完成，如果想返回具体的数据呢，怎么做。如果Activity被销毁了，还会执行到postexcutd方法吗？
+    
+Android基础——AsyncTask
+InternalHandler是在UI线程上创建的，它接收来自工作线程的消息
+总结：
+1、 AsyncTask的本质是一个静态的线程池，AsyncTask派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行。
+2、线程池中的工作线程执行doInBackground(mParams)方法执行异步任务
+3、当任务状态改变之后，工作线程会向UI线程发送消息，AsyncTask内部的InternalHandler响应这些消息，并调用相关的回调函数
+
+
+
 ### 1. 流程原理
 1. AsyncTask如何实现在doInBackgroud()中执行耗时操作。
 2. 如何在onPostExecute,onProgress等中得到返回值。
@@ -74,6 +88,20 @@ mFuture = new FutureTask<Result>(mWorker) {//使用FutureTask运行Callable任�
 1. AsyncTask是Activity非静态内部类，持有Activity的引用。
 2. 在Activity销毁前cancel掉AsyncTask。Activity销毁再跑子线程对UI也没什么意义。
 3. 或者使用static + WeakReference的形式。
+
+### 3. AsyncTask使用
+    • Asynctask的Do in background方法是怎么通知UI线程刷新进度条的？
+    • Asynctask的Do in background方法默认是返回 true ，表示任务完成，如果想返回具体的数据呢，怎么做。如果Activity被销毁了，还会执行到postexcutd方法吗？
+Android基础——AsyncTask
+
+### 4. 提供的方法
+1. 主线程执行
+	* `onPreExecute`后台任务被执行完之前调用，
+	* `onProgressUpdate`后台任务被执行完之后调用，
+	* `onPostExecute`
+	* `onCancelled()`
+2. 子线程执行
+	* `doInBackground` 后台线程执行,可以调用publishProgress
 
 ## 二 HandlerThread
 1. HandlerThread用来代替Thread。自己内部带有Looper线程，可以异步处理耗时任务。

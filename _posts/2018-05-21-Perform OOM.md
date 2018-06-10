@@ -124,6 +124,7 @@ tags: [Android]
 3. `Systrace`——检查本机系统进程，并解决丢帧引起的UI问题，可以使用CPU Monitor。
 4. `OpenGL ES跟踪器`——[图形API调试器](https://github.com/google/gapid)
 5. `Layout Inspector布局查看器`—— 运行时应用的视图层次结构。像素完美等。 
+6. DDMS是一个程序执行查看器，在里面可以看见线程和堆栈等信息，Trace View是程序性能分析器。
 
 
 ### 1. DDMS Heap Viewer

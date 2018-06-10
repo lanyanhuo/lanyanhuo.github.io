@@ -452,6 +452,18 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 #### 5.2 用法
 
 
+### 6. 避免被第三方杀掉
+1. Service设置成START_STICKY，kill 后会被重启（等待5秒左右），重传Intent，保持与重启前一样
+2. ​通过`startForeground`将进程设置为前台进程，做前台服务，优先级和前台应用一个级别​，除非在系统内存非常缺，否则此进程不会被 kill
+3. 双进程Service：让2个进程互相保护，其中一个Service被清理后，另外没被清理的进程可以立即重启进程
+4. 在已经root的设备下，修改相应的权限文件，将App伪装成系统级的应用（Android4.0系列的一个漏洞，已经确认可行）
+5. Android系统中当前进程(Process)fork出来的子进程，被系统认为是两个不同的进程。当父进程被杀死的时候，子进程仍然可以存活，并不受影响。鉴于目前提到的在Android-Service层做双守护都会失败，我们可以fork出c进程，多进程守护。死循环在那检查是否还存在，具体的思路如下（Android5.0以下可行）
+    1. 用C编写守护进程(即子进程)，守护进程做的事情就是循环检查目标进程是否存在，不存在则启动它。
+    2. 在NDK环境中将1中编写的C代码编译打包成可执行文件(BUILD_EXECUTABLE)。
+    3. 主进程启动时将守护进程放入私有目录下，赋予可执行权限，启动它即可。
+ 6. 加入到设备的白名单
+
+ 
 ## 四 BroadcastReceiver
 ### 1. 注册
 1. 静态注册：常驻系统，不受组件生命周期影响，即便应用退出，广播还是可以被接收，耗电、占内存。
@@ -599,7 +611,8 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 
 
 ## 六 Intent
-
+1. 实现界面间的切换，可以包含动作和动作数据，连接四大组件的纽带
+ 
 #### 1. Android里的Intent传递的数据有大小限制吗，如何解决？
 1. Intent传递数据大小的限制大概在1M左右，超过这个限制就会静默崩溃。处理方式如下：
 2. 进程内：EventBus，文件缓存、磁盘缓存。
@@ -617,7 +630,7 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 	</intent-filter>
 ```
 
-### MAIN, VIEW, PICK, EDIT
+### 2. MAIN, VIEW, PICK, EDIT
 
 
 
