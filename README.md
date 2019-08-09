@@ -24,6 +24,6 @@
 		*  rlqjue@gmail.com
 		*  519064189@qq.com
 	* 技能 Keywords
-		* `Software Engineer Keywords:``Java, Kotlin, Python, Android`
+		* `Software Engineer Keywords:` `Java, Kotlin, Python, Android`
 		* `OP Developer Keywords:` `Linux, Git`
 		* `Web Developer Keywords：` `Flask, Bootstrap, JQuery`
