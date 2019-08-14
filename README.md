@@ -11,7 +11,7 @@
 	* [Travel](http://ren.yyland.com/category#Travel)
 
 * 博文
-	* [Flutte实战](http://ren.yyland.com/flutter/2019/08/08/Flutter.html)
+	* [Flutter实战](http://ren.yyland.com/flutter/2019/08/08/Flutter.html)
 	* [Jetpack系列](http://ren.yyland.com/android/2019/01/04/Jet_WorkManager.html)
 	* [Linux 基础](http://ren.yyland.com/linux/2018/08/13/Linux%E6%80%BB%E7%BB%93.html)
 	* [Perform系列](http://ren.yyland.com/android/2018/05/28/Perform-Battery.html)
