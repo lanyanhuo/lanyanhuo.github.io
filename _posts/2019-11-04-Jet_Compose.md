@@ -21,7 +21,7 @@ tags: [Android]
 #### 2.1 文本元素
 1. `setContent`块定义活动的布局。代替使用XML文件定义布局内容，我们调用可组合函数。Jetpack Compose使用自定义的Kotlin编译器插件将这些可组合功能转换为应用程序的UI元素。。
 
-   ```kotlin
+   ```java
    class MainActivity : AppCompatActivity() {
        override fun onCreate(savedInstanceState: Bundle?) {
            super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ tags: [Android]
 #### 2.2 定义可组合函数
 1. 只能从其他可组合函数的范围内调用可组合函数。要使函数可组合，请添加 `@Composable` 注释。要尝试此操作，请定义一个**`Greeting()`**传递名称的 函数，并使用该名称配置文本元素。                              
 
-   ```kotlin
+   ```java
    class MainActivity : AppCompatActivity() {
      override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ tags: [Android]
 
 2. 创建另一个名为的函数`PreviewGreeting()`，该函数 `Greeting()`使用适当的参数进行调用 。在`@Preview`之前添加注释 `@Composable`。
 
-   ```kotlin
+   ```java
    @Composable
    fun Greeting(name: String) {
        Text (text = "Hello $name!")
@@ -79,7 +79,7 @@ tags: [Android]
 #### 3.1 添加一些文本
 1. 在setContent()中添加`NewStory()`, 但这几个Text没有层级关系
 
-   ```kotlin
+   ```java
    @Composable
    fun NewsStory() {
        Text("A day in Shark Fin Cove")
@@ -97,7 +97,7 @@ tags: [Android]
 #### 3.2 使用列
 1. 该`Column()`功能使您可以垂直堆叠元素。添加`Column()`到`NewsStory()`功能.
 
-   ```kotlin
+   ```java
    @Composable
    fun NewsStory() {
        Column {
@@ -111,7 +111,7 @@ tags: [Android]
 #### 3.3 添加Style修饰列
 1. `WorkRequest.Builder.setInputData(Data)`将参数传递给任务。
 
-   ```kotlin
+   ```java
    @Composable
    fun NewsStory() {
        Column(
@@ -160,7 +160,7 @@ tags: [Android]
 
 1. 实现圆角矩形
 
-```kotlin
+```java
 @Composable
 fun NewsStory() {
     val image = +imageResource(R.drawable.header)
@@ -187,7 +187,7 @@ fun NewsStory() {
 #### 4.2 设置文字样式
 1. 应用`MaterialTheme()` 设置文字样式。
 
-   ```kotlin
+   ```java
    @Composable
    fun NewsStory() {
        val image = +imageResource(R.drawable.header)
