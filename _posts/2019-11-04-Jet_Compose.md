@@ -293,9 +293,21 @@ fun NewsStory() {
 
 #### 5.4 实时预览
 
+#### 5.5 操作中遇到的问题
 
+1. 要求gradle版本最低为5.6，在gradle-wrappe.properites中修改
 
+   ```java
+   distributionBase=GRADLE_USER_HOME
+   distributionPath=wrapper/dists
+   distributionUrl=https\://services.gradle.org/distributions/gradle-5.6.1-bin.zip
+   // 不能用这个 distributionUrl=https\://services.gradle.org/distributions/gradle-5.6.1-all.zip
+   zipStoreBase=GRADLE_USER_HOME
+   zipStorePath=wrapper/dists
+   ```
 
+2. 如需预览一定得在`@Composable`之前添加`@Preview`
+3. 
 
 ### 6 [源码](https://developer.android.google.cn/reference/kotlin/androidx/ui/foundation/shape/corner/package-summary#roundedcornershape_1)
 
