@@ -320,3 +320,9 @@ fun NewsStory() {
    | [CutCornerShape](https://developer.android.google.cn/reference/kotlin/androidx/ui/foundation/shape/corner/CutCornerShape.html) | A shape describing the rectangle with cut corners.           |
    | [RoundedCornerShape](https://developer.android.google.cn/reference/kotlin/androidx/ui/foundation/shape/corner/RoundedCornerShape.html) | A shape describing the rectangle with rounded corners.       |
 
+### 7 [Jetpack Compose 与Flutter区别](https://www.v2ex.com/t/614161)
+
+1. compose 是原生的，我是指编译出来还是字节码，另外调用系统 API 也没有额外成本。集成成本应该要比 flutter 小很多。
+2. compose 现在相当于一个编译器插件 + 一个运行时库（框架
+3. 主要区别应该还是在渲染部分吧。flutter 是独立于 android，自己使用 skia 渲染，而 compose 看起来还是基于 android 那一套。只是编程方式改变了，从继承变为了组合
+

@@ -60,6 +60,19 @@ class ConcertBoundaryCallback(private val query: String, private val service: My
 #### 4.4 使用AsyncListUtil异步加载
 
 ### 5. demo
-1. [PageingWithNetwork](https://github.com/googlesamples/android-architecture-components/tree/master/PagingWithNetworkSample)了解Paging Library如何与后端API配合使用。
+1. [PagingWithNetwork](https://github.com/googlesamples/android-architecture-components/tree/master/PagingWithNetworkSample)了解Paging Library如何与后端API配合使用。
 2. [Paginigcodelab](https://codelabs.developers.google.com/codelabs/android-paging/index.html)逐步了解如何将Paging Library添加到应用程序。
 
+
+
+## [Paging 解析](https://juejin.im/post/5db06bb6518825646d79070b)
+
+1. 思维导图不错，简洁明了
+
+![img](https://mmbiz.qpic.cn/mmbiz_png/v1LbPPWiaSt4Jwbb1IaZwyibffKERwSuoVx7lPqKliahklic8IyrjAX2ib8ZOvywLUOAqE5Jc0je419mG28TII5XbmA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+2. 
+
+### 1. Paging架构
+
+1. 关键是
