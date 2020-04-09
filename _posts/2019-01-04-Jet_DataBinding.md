@@ -5,6 +5,8 @@ category: Android
 tags: [Android]
 ---
 
+
+
 ## [Jetpack DataBinding](https://developer.android.com/topic/libraries/data-binding/expressions)
 
 
@@ -243,7 +245,7 @@ fun convertColorToDrawable(color: Int) = ColorDrawable(color)`, 使用` <View  a
 	    }
 	}
 	```
-        
+  
 #### 6.2 使用ViewModel管理与UI相关的数据
 1. 定义1个ViewModel
 

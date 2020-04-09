@@ -177,7 +177,7 @@ tags: [Android]
 3. GPU Monitor
 	* Android5.0后，在模拟器上打开`开发者选项`，使用`adb shell dumpsys gfxinfo`设置`Profile GPU rending`。
 
-### 2. 显示Android Monitor
+### 2. 显示Android Monitor [AS 3.1 已经没有这个TAB了，需要去/Android/sdk/tools/monitor]
 1. 点击Android Monitor，默认位于主窗口的底部。
 2. 或选择 View > Tool Windows > Android Moniotr.
 
@@ -276,7 +276,7 @@ tags: [Android]
 ### 5. Memory Profiler
 
 ### 6. Network Profiler 
-	
+
 ## 四 LeakCanary检测内存
 1. 直接对.hprof文件进行分析，找到对象的引用链。
 2. 在build.gradle文件中添加
