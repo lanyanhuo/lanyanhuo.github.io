@@ -13,7 +13,7 @@ tags: [Android]
 ### 1. 前期工作
 
 #### 1.1 建立环境
-```
+```java
 android {
     ...
     dataBinding {
@@ -30,13 +30,13 @@ android {
 
 ### 2. 布局和绑定表达式
 #### 2.1 layout —— activity_main.layout
-```
+```java
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
    <data>
        <variable name="user" type="com.xxx.User"/>
-		<import type="android.util.SparseArray"/>
-		<variable name="sparse" type="SparseArray<String>"/>
+				<import type="android.util.SparseArray"/>
+				<variable name="sparse" type="SparseArray<String>"/>
 		
    </data>
    <LinearLayout
@@ -60,7 +60,7 @@ android {
 1. 编译后生成`ActivityMainBinding `
 2. 在`MainActivity`中绑定
 
-	```
+	```java
 	val binding: ActivityMainBinding = DataBindingUtil.setContentView(
             this, R.layout.activity_main)
     binding.user = User("Test", "User")
@@ -94,8 +94,11 @@ res <——> android:padding="@{large? @dimen/largePadding : @dimen/smallPadding
 
 #### 2.5 方法调用
 1. User类中定义点击事件处理方法 `fun onClickUser(view: View) { ... }`
+
 2. 调用 `android:onClick="@{User::onClickUser}"`
+
 3. CallBack类中定义事件回调 `fun onSaveClick(view: View, user: User){}`
+
 4. 调用
 
 	```
