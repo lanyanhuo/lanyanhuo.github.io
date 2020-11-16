@@ -21,10 +21,11 @@ tags: [Android]
 
 ### 2. 支持不同的数据架构
 1. `Only NetWork`: 使用`Retrofit API`加载数据到`DataSource`对象中。
+   * 网络数据分页加载，常用3种不同方案：`PositionalDataSource、PageKeyedDataSource和ItemKeyedDataSource`
 2. `Only DB`：使用`Room`
 3. `Network和DB`：
-	* 在开始观察数据库之后，通过使用来监听数据库何时没有数据 `PagedList.BoundaryCallback`。
-	* 然后，从网络中获取更多项目并将其插入数据库。
+  * 在开始观察数据库之后，通过使用来监听数据库何时没有数据 `PagedList.BoundaryCallback`。
+  * 然后，从网络中获取更多项目并将其插入数据库。
 
 ```
 class ConcerViewModel {
@@ -71,8 +72,24 @@ class ConcertBoundaryCallback(private val query: String, private val service: My
 
 ![img](https://mmbiz.qpic.cn/mmbiz_png/v1LbPPWiaSt4Jwbb1IaZwyibffKERwSuoVx7lPqKliahklic8IyrjAX2ib8ZOvywLUOAqE5Jc0je419mG28TII5XbmA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-2. 
+2. 具体步骤
 
-### 1. Paging架构
+   * 1.在RecyclerView的滑动过程中，会触发PagedListAdapter类中的onBindViewHolder()方法。数据与RecycleView Item布局中的UI控件正是在该方法中进行绑定的。
+   * 2.当RecyclerView滑动到底部时，在onBindViewHolder()方法中所调用的getItem()方法会通知PagedList，当前需要载入更多数据。
+   * 3.接着，PagedList会根据PageList.Config中的配置通知DataSource执行具体的数据获取工作。
+   * 4.DataSource从网络/本地数据库取得数据后，交给PagedList，PagedList将持有这些数据。
+   * 5.PagedList将数据交给PagedListAdapter中的DiffUtil进行比对和处理。
+   * 6.数据在经过处理后，交由RecyclerView进行展示。
 
-1. 关键是
+   ![](https://raw.githubusercontent.com/rlq/image/master/android/paging.png)
+
+3. BoundaryCallback
+
+   ![](https://raw.githubusercontent.com/rlq/image/master/android/20200916090912.png)
+
+### 1. 3种DataSource
+
+1. `PositionalDataSource:` start=2&count=5，请求第2条数据开始往后的5条数据
+2. `PageKeyedDataSource: `page=2&pageSize=5，5条数据为一页，当前返回第二页的5条数据
+3. `ItemKeyedDataSource：`since=9527&pageSize=5，返回key=9527之后的5条数据
+
