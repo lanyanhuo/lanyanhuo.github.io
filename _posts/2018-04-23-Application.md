@@ -109,7 +109,7 @@ AlasActivity,  ExpandableActivity, PreferenceActivity
 			setResult(RESULT_OK, (new Intent()).setAction("Corky!")); 
 			finish(); 
 		}
-	``` 
+	```
 
 ### 2. 启动方式以及应用场景，Activity栈
 1. standard Mode
@@ -175,8 +175,9 @@ AlasActivity,  ExpandableActivity, PreferenceActivity
 
 ### 6. 当后台的activity被系统回收怎么办
 1. 如果程序需要在Activity被回收之前能记录下该Activity运行时的状态信息，则可以从Activity的生命周期着手考虑：
-	* 因为系统在内存紧张时只可能回收处于暂停、停止状态的Activity。当Activity进入暂停状态之前，一定要先回调onPause方法，进行停止状态之前，一定会先回调onPause、onStop方法，因此程序可以通过重写onPause方法，把Activity的运行状态记录到存储设备上，然后重写onResume()方法，并在该方法中判断之前是否存储过Activity的运行状态，如果有记录之前的运行状态，在onResume()方法中恢复该程序的运行状态即可。
-
+	
+* 因为系统在内存紧张时只可能回收处于暂停、停止状态的Activity。当Activity进入暂停状态之前，一定要先回调onPause方法，进行停止状态之前，一定会先回调onPause、onStop方法，因此程序可以通过重写onPause方法，把Activity的运行状态记录到存储设备上，然后重写onResume()方法，并在该方法中判断之前是否存储过Activity的运行状态，如果有记录之前的运行状态，在onResume()方法中恢复该程序的运行状态即可。
+	
 2. 系统会帮我们记录下回收前activity的状态，再次调用被回收的activity就要重新调用
 onCreate()方法，不同直接启动的是这次onCreate()里是带参数的savedInstanceSate；一般可以判断其是否为null，不为null时可以使用它来恢复到回收前的状态。
 
@@ -204,7 +205,7 @@ onCreate()方法，不同直接启动的是这次onCreate()里是带参数的sav
 	　　} 
 	```
 
-　
+
 ## <font color=#0099ff size=6> 二 Fragment </font>
 
 ### 1. 生命周期
@@ -304,7 +305,7 @@ ViewPager使用细节，如何设置成每次只初始化当前的Fragment，其
 		* AIDL,两个android应用间的互相调用方法？
     	* AIDL的全称是什么？如何工作？
 		* 能处理哪些类型的数据
-    
+  
 2. 用法
 	* 创建一个aidl文件，添加`IRemoteService.aidl`，以及需要实现的接口`getId(), getType()`。
 	* 保存后编译器会在gen目录下自动生成`IRemoteService.java`文件
@@ -528,7 +529,7 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 
 ### 6. 进程保活，避免被杀掉
 1. Service设置成START_STICKY，kill 后会被重启（等待5秒左右），重传Intent，保持与重启前一样
-2. ​通过`startForeground`将进程设置为前台进程，做前台服务，优先级和前台应用一个级别​，除非在系统内存非常缺，否则此进程不会被 kill
+2. 通过`startForeground`将进程设置为前台进程，做前台服务，优先级和前台应用一个级别​，除非在系统内存非常缺，否则此进程不会被 kill
 3. 双进程Service：让2个进程互相保护，其中一个Service被清理后，另外没被清理的进程可以立即重启进程
 4. 在已经root的设备下，修改相应的权限文件，将App伪装成系统级的应用（Android4.0系列的一个漏洞，已经确认可行）
 5. Android系统中当前进程(Process)fork出来的子进程，被系统认为是两个不同的进程。当父进程被杀死的时候，子进程仍然可以存活，并不受影响。鉴于目前提到的在Android-Service层做双守护都会失败，我们可以fork出c进程，多进程守护。死循环在那检查是否还存在，具体的思路如下（Android5.0以下可行）
@@ -688,7 +689,7 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 
 ## <font color=#0099ff size=6> 六 Intent </font>
 1. 实现界面间的切换，可以包含动作和动作数据，连接四大组件的纽带
- 
+
 #### Android里的Intent传递的数据有大小限制吗，如何解决？
 1. Intent传递数据大小的限制大概在1M左右，超过这个限制就会静默崩溃。处理方式如下：
 2. 进程内：EventBus，文件缓存、磁盘缓存。
@@ -819,6 +820,7 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 		* `internalOnly`是指必须安装到内部才能运行
 		* (注：需要进行后台类监控的APP最好安装在内部，而一些较大的游戏APP最好安装在SD卡上。现默认为安装在内部，如果把APP安装在SD卡上，首先得设置你的level为8，并且要配置android:installLocation这个参数的属性为preferExternal)
  4. 第二层(<Application>):属性
+
 	* 一个AndroidManifest.xml中必须含有一个Application标签，这个标签声明了每一个应用程序的组件及其属性(如icon,label,permission等)
 	
 	```
@@ -839,7 +841,7 @@ private Messenger messenger;/**向Service发送Message的Messenger对象*/
 		android:process="string"
 		android:restoreAnyVersion=["true" | "false"]
 		android:taskAffinity="string"
-		android:theme="resource or theme"> </application>
+​		android:theme="resource or theme"> </application>
 
 	```
 	
@@ -934,7 +936,7 @@ intent-filter属性
 android:priority(解释：有序广播主要是按照声明的优先级别，如A的级别高于B，那么，广播先传给A，再传给B。优先级别就是用设置priority属性来确定，范围是从-1000～1000，数越大优先级别越高)
  Intent filter内会设定的资料包括action,data与category三种。也就是说filter只会与intent里的这三种资料作对比动作
  action属性
-action很简单，只有android:name这个属性。常见的android:name值为android.intent.action.MAIN，表明此activity是作为应用程序的入口。有关android:name具体有哪些值，可参照这个网址：http://hi.baidu.com/linghtway/blog/item/83713cc1c2d053170ff477a7.html
+action很简单，只有android:name这个属性。常见的android:name值为android.intent.action.MAIN，表明此activity是作为应用程序的入口。
 category属性
 category也只有android:name属性。常见的android:name值为android.intent.category.LAUNCHER(决定应用程序是否显示在程序列表里)
 有关android:name具体有哪些值，可参照这个网址：http://chroya.javaeye.com/blog/685871
